@@ -2,14 +2,15 @@ import styled from 'styled-components';
 
 // Theme colors
 const primaryBlue = '#1565cd';
+const primaryDarkBlue = '#003c8f';
 const secondaryGrey = '#e0e0e0';
 
-const GridBody = styled.div`
+const AppContainer = styled.div`
+  height: 100vh;
+  width: 100vw;
   display: grid;
-  grid-template-columns: ${() => (window.innerWidth < 500 ? '16px 4fr 16px' : '1fr 4fr 1fr')};
-  justify-items: center;
-  line-height: 1.4;
-  margin-bottom: 56px;
+  grid-template-columns: 56px auto 56px;
+  grid-template-rows: 56px auto 56px;
 `;
 
 const SplashScreenBody = styled.div`
@@ -20,7 +21,6 @@ const SplashScreenBody = styled.div`
   color: ${secondaryGrey};
   line-height: 1.4;
   text-align: center;
-  grid-columns: 100vw;
   justify-items: center;
   cursor: wait;
 `;
@@ -29,7 +29,7 @@ const NavBarStyle = styled.nav`
   width: 100%;
   background-color: ${primaryBlue};
   height: 56px;
-  position: absolute;
+  grid-column: 1 / span 3;
   display: flex;
   align-items: center;
   color: ${secondaryGrey};
@@ -38,10 +38,45 @@ const NavBarStyle = styled.nav`
 const UnstyledButton = styled.button`
   display: inline-block;
   border: none;
-  padding: none;
-  margin: none;
+  margin: 0;
   background: ${props => props.color || 'none'};
   text-align: center;
 `;
 
-export { GridBody, SplashScreenBody, NavBarStyle, UnstyledButton };
+const MenuBarStyle = styled(UnstyledButton)`
+  background-color: ${primaryDarkBlue};
+  ${props => {
+    if (props.side === 'left') {
+      return `
+        height: 50%;
+        width: 56px;
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+        align-self: center;
+        `;
+    }
+    if (props.side === 'right') {
+      return `
+        height: 50%;
+        width: 56px;
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+        grid-column: 3;
+        align-self: center;
+      `;
+    }
+    if (props.side === 'bottom') {
+      return `
+        height: 56px;
+        width: 200px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        grid-column: 2;
+        grid-row: 3;
+        justify-self: center;
+      `;
+    }
+  }};
+`;
+
+export { AppContainer, SplashScreenBody, NavBarStyle, UnstyledButton, MenuBarStyle };
