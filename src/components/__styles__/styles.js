@@ -68,7 +68,7 @@ const MenuBarStyle = styled(UnstyledButton)`
     if (props.side === 'bottom') {
       return `
         height: 56px;
-        width: 200px;
+        width: 50vw;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         grid-column: 2;
@@ -76,7 +76,48 @@ const MenuBarStyle = styled(UnstyledButton)`
         justify-self: center;
       `;
     }
+    return ``;
   }};
 `;
 
-export { AppContainer, SplashScreenBody, NavBarStyle, UnstyledButton, MenuBarStyle };
+const ExpandedMenuBar = styled(UnstyledButton)`
+  background-color: ${primaryDarkBlue};
+  ${props => {
+    if (props.side === 'left') {
+      return `
+        grid-column: 1 /span 2;
+        height: 80%;
+        width: 90%;
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+        align-self: center;
+        `;
+    }
+    if (props.side === 'right') {
+      return `
+        height: 80%;
+        width: 90%;
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+        grid-column: 2 / span 2;
+        align-self: center;
+        justify-self: end;
+      `;
+    }
+    if (props.side === 'bottom') {
+      return `
+        height: 60%;
+        width: 90%;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        grid-column: 2;
+        grid-row: 2 / span 2;
+        justify-self: center;
+        align-self: end;
+      `;
+    }
+    return ``;
+  }};
+`;
+
+export { AppContainer, SplashScreenBody, NavBarStyle, UnstyledButton, MenuBarStyle, ExpandedMenuBar };

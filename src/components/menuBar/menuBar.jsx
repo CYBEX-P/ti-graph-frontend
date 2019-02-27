@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MenuBarStyle } from '../__styles__/styles';
+import { MenuBarStyle, ExpandedMenuBar } from '../__styles__/styles';
+import MenuContext from '../App/MenuContext';
 
 const MenuBar = props => {
   const { icon, side } = props;
+  const { isExpanded, dispatchExpand } = useContext(MenuContext);
 
   return (
-    <MenuBarStyle side={side}>
-      <FontAwesomeIcon icon={icon} color="#e0e0e0" size="lg" />
-    </MenuBarStyle>
+    <>
+      {isExpanded === side ? (
+        <ExpandedMenuBar
+          side={side}
+          onClick={() => {
+            dispatchExpand('none');
+          }}
+        >
+          <FontAwesomeIcon icon="chevron-circle-right" color="#e0e0e0" size="3x" />
+        </ExpandedMenuBar>
+      ) : (
+        side && (
+          <MenuBarStyle
+            side={side}
+            onClick={() => {
+              dispatchExpand(side);
+            }}
+          >
+            <FontAwesomeIcon icon={icon} color="#e0e0e0" size="lg" />
+          </MenuBarStyle>
+        )
+      )}
+    </>
   );
 };
 
