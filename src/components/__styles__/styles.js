@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 
 // Theme colors
-const primaryBlue = '#1565cd';
-const primaryDarkBlue = '#003c8f';
+const primaryBlue = '#0277bd';
+const primaryDarkBlue = '#004c8c';
+const primaryLightBlue = '#58a5f0';
 const secondaryGrey = '#e0e0e0';
 
 const AppContainer = styled.div`
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: grid;
-  grid-template-columns: 56px auto 56px;
-  grid-template-rows: 56px auto 56px;
+  grid-template-columns: 36px 300px auto 300px 36px;
+  grid-template-rows: 56px 200px auto 200px 36px;
 `;
 
 const SplashScreenBody = styled.div`
@@ -29,7 +30,8 @@ const NavBarStyle = styled.nav`
   width: 100%;
   background-color: ${primaryBlue};
   height: 56px;
-  grid-column: 1 / span 3;
+  grid-column: 1 / span 5;
+  grid-row: 1;
   display: flex;
   align-items: center;
   color: ${secondaryGrey};
@@ -44,35 +46,41 @@ const UnstyledButton = styled.button`
 `;
 
 const MenuBarStyle = styled(UnstyledButton)`
-  background-color: ${primaryDarkBlue};
+  background-color: ${primaryLightBlue};
   ${props => {
     if (props.side === 'left') {
       return `
-        height: 50%;
-        width: 56px;
+        box-shadow: 0px 1px 4px 1px #11111144;
+        height: 128px;
+        width: 36px;
         border-top-right-radius: 16px;
         border-bottom-right-radius: 16px;
         align-self: center;
+        grid-row: 2 / span 3;
+        grid-column: 1;
         `;
     }
     if (props.side === 'right') {
       return `
-        height: 50%;
-        width: 56px;
+        box-shadow: 0px 1px 4px 1px #11111144;
+        height: 128px;
+        width: 36px;
         border-top-left-radius: 16px;
         border-bottom-left-radius: 16px;
-        grid-column: 3;
+        grid-column: 5;
         align-self: center;
-      `;
+        grid-row: 2 / span 3;
+        `;
     }
     if (props.side === 'bottom') {
       return `
-        height: 56px;
-        width: 50vw;
+        box-shadow: 1px 0px 4px 1px #11111144;
+        height: 36px;
+        width: 128px;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
-        grid-column: 2;
-        grid-row: 3;
+        grid-column: 2 / span 3;
+        grid-row: 5;
         justify-self: center;
       `;
     }
@@ -82,13 +90,15 @@ const MenuBarStyle = styled(UnstyledButton)`
 
 const ExpandedMenuBar = styled.div`
   background-color: ${primaryDarkBlue};
+  border: 3px solid ${primaryBlue};
   ${props => {
     if (props.side === 'left') {
       return `
         display: grid;
         grid-column: 1 /span 2;
-        height: 80%;
-        width: 50%;
+        grid-row: 2 /span 3;
+        height: 100%;
+        width: 100%;
         border-top-right-radius: 16px;
         border-bottom-right-radius: 16px;
         align-self: center;
@@ -99,11 +109,12 @@ const ExpandedMenuBar = styled.div`
     if (props.side === 'right') {
       return `
         display: grid;
-        height: 80%;
-        width: 50%;
+        height: 100%;
+        width: 100%;
         border-top-left-radius: 16px;
         border-bottom-left-radius: 16px;
-        grid-column: 2 / span 2;
+        grid-column: 4 / span 2;
+        grid-row: 2 / span 3;
         align-self: center;
         justify-self: end;
         align-items: center;
@@ -113,12 +124,12 @@ const ExpandedMenuBar = styled.div`
       return `
         justify-items: center;
         display: grid;
-        height: 40%;
-        width: 80vw;
+        height: 100%;
+        width: 800px;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
-        grid-column: 2;
-        grid-row: 2 / span 2;
+        grid-column: 2 / span 3;
+        grid-row: 4 / span 2;
         justify-self: center;
         align-self: end;
       `;
@@ -127,4 +138,17 @@ const ExpandedMenuBar = styled.div`
   }};
 `;
 
-export { AppContainer, SplashScreenBody, NavBarStyle, UnstyledButton, MenuBarStyle, ExpandedMenuBar };
+const ContentContainerStyle = styled.div`
+  grid-row: 1 / span 5;
+  grid-column: 1 / span 5;
+`;
+
+export {
+  AppContainer,
+  SplashScreenBody,
+  NavBarStyle,
+  UnstyledButton,
+  MenuBarStyle,
+  ExpandedMenuBar,
+  ContentContainerStyle
+};
