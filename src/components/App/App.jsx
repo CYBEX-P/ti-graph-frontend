@@ -1,11 +1,11 @@
 import React, { useReducer } from 'react';
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
-import { AppContainer } from '../__styles__/styles';
+import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
 import MenuContext from './MenuContext';
 
 const App = () => {
-  const [isExpanded, dispatchExpand] = useReducer((state, action) => {
+  const [isExpanded, dispatchExpand] = useReducer((_, action) => {
     if (action === 'left' || action === 'right' || action === 'bottom') {
       return action;
     }
@@ -14,6 +14,8 @@ const App = () => {
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <AppContainer>
+        {/* Important to have content rendered under navbar and menubar */}
+        <ContentContainerStyle />
         <NavBar />
         <MenuBar side="left" icon="search" />
         <MenuBar side="right" icon="history" />
