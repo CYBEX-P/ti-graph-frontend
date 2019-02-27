@@ -80,34 +80,41 @@ const MenuBarStyle = styled(UnstyledButton)`
   }};
 `;
 
-const ExpandedMenuBar = styled(UnstyledButton)`
+const ExpandedMenuBar = styled.div`
   background-color: ${primaryDarkBlue};
   ${props => {
     if (props.side === 'left') {
       return `
+        display: grid;
         grid-column: 1 /span 2;
         height: 80%;
-        width: 90%;
+        width: 50%;
         border-top-right-radius: 16px;
         border-bottom-right-radius: 16px;
         align-self: center;
+        align-items: center;
+        justify-items: end;
         `;
     }
     if (props.side === 'right') {
       return `
+        display: grid;
         height: 80%;
-        width: 90%;
+        width: 50%;
         border-top-left-radius: 16px;
         border-bottom-left-radius: 16px;
         grid-column: 2 / span 2;
         align-self: center;
         justify-self: end;
-      `;
+        align-items: center;
+        `;
     }
     if (props.side === 'bottom') {
       return `
-        height: 60%;
-        width: 90%;
+        justify-items: center;
+        display: grid;
+        height: 40%;
+        width: 80vw;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         grid-column: 2;

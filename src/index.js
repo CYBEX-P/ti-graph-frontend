@@ -8,10 +8,21 @@ import {
   faSearch,
   faHistory,
   faList,
-  faChevronCircleRight
+  faChevronCircleRight,
+  faChevronCircleLeft,
+  faChevronCircleDown
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
 
-library.add(faChartBar, faBars, faSearch, faHistory, faList, faChevronCircleRight);
+library.add(
+  faChartBar,
+  faBars,
+  faSearch,
+  faHistory,
+  faList,
+  faChevronCircleRight,
+  faChevronCircleLeft,
+  faChevronCircleDown
+);
 
 ReactDOM.render(<App />, document.getElementById('root'));

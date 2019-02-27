@@ -8,6 +8,8 @@ const MenuBar = props => {
   const { icon, side } = props;
   const { isExpanded, dispatchExpand } = useContext(MenuContext);
 
+  const iconToUse = `chevron-circle-${(s => (s === 'left' || s === 'right' ? s : 'down'))(side)}`;
+
   return (
     <>
       {isExpanded === side ? (
@@ -17,7 +19,7 @@ const MenuBar = props => {
             dispatchExpand('none');
           }}
         >
-          <FontAwesomeIcon icon="chevron-circle-right" color="#e0e0e0" size="3x" />
+          <FontAwesomeIcon icon={iconToUse} color="#e0e0e0" size="3x" />
         </ExpandedMenuBar>
       ) : (
         side && (
