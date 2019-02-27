@@ -141,6 +141,9 @@ const ExpandedMenuBar = styled.div`
 const ContentContainerStyle = styled.div`
   grid-row: 1 / span 5;
   grid-column: 1 / span 5;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 `;
 
 export {

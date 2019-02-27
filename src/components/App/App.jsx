@@ -15,7 +15,9 @@ const App = () => {
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <AppContainer>
         {/* Important to have content rendered under navbar and menubar */}
-        <ContentContainerStyle />
+        <ContentContainerStyle>
+          <p>Graph will go here!</p>
+        </ContentContainerStyle>
         <NavBar />
         <MenuBar side="left" icon="search" />
         <MenuBar side="right" icon="history" />
