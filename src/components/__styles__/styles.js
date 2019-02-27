@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 // Theme colors
-const primaryBlue = '#1565cd';
-const primaryDarkBlue = '#003c8f';
+const primaryBlue = '#0277bd';
+const primaryDarkBlue = '#004c8c';
+const primaryLightBlue = '#58a5f0';
 const secondaryGrey = '#e0e0e0';
 
 const AppContainer = styled.div`
@@ -45,10 +46,11 @@ const UnstyledButton = styled.button`
 `;
 
 const MenuBarStyle = styled(UnstyledButton)`
-  background-color: ${primaryDarkBlue};
+  background-color: ${primaryLightBlue};
   ${props => {
     if (props.side === 'left') {
       return `
+        box-shadow: 0px 1px 4px 1px #11111144;
         height: 128px;
         width: 36px;
         border-top-right-radius: 16px;
@@ -60,6 +62,7 @@ const MenuBarStyle = styled(UnstyledButton)`
     }
     if (props.side === 'right') {
       return `
+        box-shadow: 0px 1px 4px 1px #11111144;
         height: 128px;
         width: 36px;
         border-top-left-radius: 16px;
@@ -67,10 +70,11 @@ const MenuBarStyle = styled(UnstyledButton)`
         grid-column: 5;
         align-self: center;
         grid-row: 2 / span 3;
-      `;
+        `;
     }
     if (props.side === 'bottom') {
       return `
+        box-shadow: 1px 0px 4px 1px #11111144;
         height: 36px;
         width: 128px;
         border-top-left-radius: 16px;
@@ -86,6 +90,7 @@ const MenuBarStyle = styled(UnstyledButton)`
 
 const ExpandedMenuBar = styled.div`
   background-color: ${primaryDarkBlue};
+  border: 3px solid ${primaryBlue};
   ${props => {
     if (props.side === 'left') {
       return `
@@ -120,7 +125,7 @@ const ExpandedMenuBar = styled.div`
         justify-items: center;
         display: grid;
         height: 100%;
-        width: 100%;
+        width: 800px;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         grid-column: 2 / span 3;
@@ -136,7 +141,6 @@ const ExpandedMenuBar = styled.div`
 const ContentContainerStyle = styled.div`
   grid-row: 1 / span 5;
   grid-column: 1 / span 5;
-  background-color: #e0e0e0;
 `;
 
 export {

@@ -29,7 +29,7 @@ const MenuBar = props => {
               dispatchExpand(side);
             }}
           >
-            <FontAwesomeIcon icon={icon} color="#e0e0e0" size="lg" />
+            <FontAwesomeIcon icon={icon} color="#111111" size="lg" />
           </MenuBarStyle>
         )
       )}
