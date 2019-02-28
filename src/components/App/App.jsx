@@ -22,7 +22,7 @@ const App = () => {
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
-        <AppContainer id="container">
+        <AppContainer>
           {/* Important to have content rendered under navbar and menubar */}
           <ContentContainerStyle
             onClick={() => {
@@ -30,7 +30,9 @@ const App = () => {
             }}
           >
             <p>Graph will go here!</p>
-            <GraphModal />
+            <GraphModal title="example" contentLabel="Example Modal">
+              <div>Content will go here soon!</div>
+            </GraphModal>
           </ContentContainerStyle>
           <NavBar />
           <MenuBar side="left" icon="search">

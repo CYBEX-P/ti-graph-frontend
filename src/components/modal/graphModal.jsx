@@ -1,22 +1,61 @@
 import React, { useContext } from 'react';
-import Modal from 'react-modal';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import ReactModal from 'react-modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ModalContext from '../App/ModalContext';
 import MenuContext from '../App/MenuContext';
-import { UnstyledButton } from '../__styles__/styles';
+import { UnstyledButton, ModalContentStyle } from '../__styles__/styles';
 
-Modal.setAppElement('#root');
+const TitleStyle = styled.div`
+  grid-row: 1;
+  grid-column: 1;
+  font-weight: bold;
+  align-self: center;
+  font-size: 24px;
+`;
 
-const GraphModal = () => {
+const ExitStyle = styled.div`
+  grid-row: 1;
+  grid-column: 2;
+  align-self: center;
+  justify-self: center;
+`;
+
+const ContentStyle = styled.div`
+  grid-row: 2;
+  grid-column: 1 / span 2;
+`;
+
+ReactModal.setAppElement('#root');
+
+const GraphModal = ({ contentLabel, children, title }) => {
   const { isShowingModal, dispatchModal } = useContext(ModalContext);
   const { dispatchExpand } = useContext(MenuContext);
   return (
-    <Modal isOpen={isShowingModal} onAfterOpen={() => dispatchExpand('none')} contentLabel="Example Modal">
-      <UnstyledButton onClick={() => dispatchModal(false)}>
-        <FontAwesomeIcon icon="times" />
-      </UnstyledButton>
-    </Modal>
+    <ReactModal isOpen={isShowingModal} onAfterOpen={() => dispatchExpand('none')} contentLabel={contentLabel}>
+      <ModalContentStyle>
+        <TitleStyle>{title}</TitleStyle>
+        <ExitStyle>
+          <UnstyledButton onClick={() => dispatchModal(false)}>
+            <FontAwesomeIcon icon="times" size="2x" />
+          </UnstyledButton>
+        </ExitStyle>
+        <ContentStyle>{children}</ContentStyle>
+      </ModalContentStyle>
+    </ReactModal>
   );
+};
+
+GraphModal.propTypes = {
+  contentLabel: PropTypes.string,
+  children: PropTypes.node,
+  title: PropTypes.string.isRequired
+};
+
+GraphModal.defaultProps = {
+  contentLabel: 'Graph Modal',
+  children: <></>
 };
 
 export default GraphModal;
