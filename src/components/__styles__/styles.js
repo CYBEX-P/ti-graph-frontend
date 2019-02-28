@@ -166,6 +166,14 @@ const ContentContainerStyle = styled.div`
   justify-content: center;
 `;
 
+const ModalContentStyle = styled.div`
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 36px auto;
+  grid-template-columns: auto 36px;
+`;
+
 export {
   AppContainer,
   SplashScreenBody,
@@ -175,5 +183,6 @@ export {
   ExpandedMenuBar,
   MenuBarChildStyle,
   MenuBarIconStyle,
-  ContentContainerStyle
+  ContentContainerStyle,
+  ModalContentStyle
 };
