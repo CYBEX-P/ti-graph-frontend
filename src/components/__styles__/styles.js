@@ -94,6 +94,7 @@ const ExpandedMenuBar = styled.div`
   ${props => {
     if (props.side === 'left') {
       return `
+        grid-template-columns: auto 50px;
         display: grid;
         grid-column: 1 /span 2;
         grid-row: 2 /span 3;
@@ -108,6 +109,7 @@ const ExpandedMenuBar = styled.div`
     }
     if (props.side === 'right') {
       return `
+        grid-template-columns: 50px auto;
         display: grid;
         height: 100%;
         width: 100%;
@@ -122,6 +124,7 @@ const ExpandedMenuBar = styled.div`
     }
     if (props.side === 'bottom') {
       return `
+        grid-template-rows: 50px auto;
         justify-items: center;
         display: grid;
         height: 100%;
@@ -138,9 +141,29 @@ const ExpandedMenuBar = styled.div`
   }};
 `;
 
+const MenuBarChildStyle = styled.div`
+  grid-column: ${({ side }) => (side === 'right' ? 2 : 1)};
+  grid-row: ${({ side }) => (side === 'bottom' ? 2 : 1)};
+  width: 100%;
+  height: 100%;
+`;
+
+const MenuBarIconStyle = styled.div`
+  grid-column: ${({ side }) => {
+    if (side === 'right' || side === 'bottom') {
+      return 1;
+    }
+    return 2;
+  }};
+  grid-row: 1;
+`;
+
 const ContentContainerStyle = styled.div`
   grid-row: 1 / span 5;
   grid-column: 1 / span 5;
+  display: grid;
+  align-content: center;
+  justify-content: center;
 `;
 
 export {
@@ -150,5 +173,7 @@ export {
   UnstyledButton,
   MenuBarStyle,
   ExpandedMenuBar,
+  MenuBarChildStyle,
+  MenuBarIconStyle,
   ContentContainerStyle
 };

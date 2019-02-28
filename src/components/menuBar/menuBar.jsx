@@ -1,11 +1,17 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MenuBarStyle, ExpandedMenuBar } from '../__styles__/styles';
+import {
+  MenuBarStyle,
+  ExpandedMenuBar,
+  MenuBarChildStyle,
+  MenuBarIconStyle,
+  UnstyledButton
+} from '../__styles__/styles';
 import MenuContext from '../App/MenuContext';
 
 const MenuBar = props => {
-  const { icon, side } = props;
+  const { icon, side, children } = props;
   const { isExpanded, dispatchExpand } = useContext(MenuContext);
 
   const iconToUse = `chevron-circle-${(s => (s === 'left' || s === 'right' ? s : 'down'))(side)}`;
@@ -13,13 +19,18 @@ const MenuBar = props => {
   return (
     <>
       {isExpanded === side ? (
-        <ExpandedMenuBar
-          side={side}
-          onClick={() => {
-            dispatchExpand('none');
-          }}
-        >
-          <FontAwesomeIcon icon={iconToUse} color="#e0e0e0" size="3x" />
+        <ExpandedMenuBar side={side}>
+          <MenuBarChildStyle side={side}>{children}</MenuBarChildStyle>
+          <MenuBarIconStyle side={side}>
+            <UnstyledButton
+              onClick={() => {
+                dispatchExpand('none');
+              }}
+              type="button"
+            >
+              <FontAwesomeIcon icon={iconToUse} color="#e0e0e0" size="3x" />
+            </UnstyledButton>
+          </MenuBarIconStyle>
         </ExpandedMenuBar>
       ) : (
         side && (
@@ -39,11 +50,13 @@ const MenuBar = props => {
 
 MenuBar.propTypes = {
   icon: PropTypes.string,
-  side: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired
+  side: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
+  children: PropTypes.element
 };
 
 MenuBar.defaultProps = {
-  icon: 'search'
+  icon: 'search',
+  children: undefined
 };
 
 export default MenuBar;
