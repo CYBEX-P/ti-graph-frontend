@@ -14,18 +14,24 @@ const App = () => {
     }
     return 'none';
   }, 'none');
+
   const [isShowingModal, dispatchModal] = useReducer((state, action) => {
     if (state === action) {
       return state;
     }
     return action;
   }, false);
+
   const [neo4jData, setNeo4jData] = useState('');
+
   useEffect(() => {
-    axios.get('/neo4j/export').then(({ data }) => {
-      setNeo4jData(data);
-    });
-  });
+    if (isShowingModal === 'Neo4j Data') {
+      axios.get('/neo4j/export').then(({ data }) => {
+        setNeo4jData(data);
+      });
+    }
+  }, [isShowingModal]);
+
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
