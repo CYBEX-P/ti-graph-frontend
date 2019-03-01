@@ -33,7 +33,11 @@ const GraphModal = ({ contentLabel, children, title }) => {
   const { isShowingModal, dispatchModal } = useContext(ModalContext);
   const { dispatchExpand } = useContext(MenuContext);
   return (
-    <ReactModal isOpen={isShowingModal} onAfterOpen={() => dispatchExpand('none')} contentLabel={contentLabel}>
+    <ReactModal
+      isOpen={isShowingModal === title}
+      onAfterOpen={() => dispatchExpand('none')}
+      contentLabel={contentLabel}
+    >
       <ModalContentStyle>
         <TitleStyle>{title}</TitleStyle>
         <ExitStyle>
