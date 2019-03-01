@@ -114,11 +114,15 @@ const App = () => {
                     <option value="none">None</option>
                     {neo4jData &&
                       neo4jData.Neo4j[0].map(({ nodes }) =>
-                        nodes.map(({ properties, id }) => (
-                          <option key={id} value={properties.IP} label={properties.IP}>
-                            {properties.IP}
-                          </option>
-                        ))
+                        nodes.map(({ properties, id }) => {
+                          return (
+                            properties.IP && (
+                              <option key={id} value={properties.IP} label={properties.IP}>
+                                {properties.IP}
+                              </option>
+                            )
+                          );
+                        })
                       )}
                   </select>
                   <br />
