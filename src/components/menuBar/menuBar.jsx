@@ -51,7 +51,7 @@ const MenuBar = props => {
 MenuBar.propTypes = {
   icon: PropTypes.string,
   side: PropTypes.oneOf(['left', 'right', 'bottom']).isRequired,
-  children: PropTypes.element
+  children: PropTypes.node
 };
 
 MenuBar.defaultProps = {

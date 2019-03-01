@@ -1,4 +1,5 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
+import axios from 'axios';
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
 import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
@@ -19,6 +20,12 @@ const App = () => {
     }
     return action;
   }, false);
+  const [neo4jData, setNeo4jData] = useState('');
+  useEffect(() => {
+    axios.get('/neo4j/export').then(({ data }) => {
+      setNeo4jData(data);
+    });
+  });
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
@@ -33,13 +40,16 @@ const App = () => {
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
             </GraphModal>
+            <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
+              <div>{JSON.stringify(neo4jData)}</div>
+            </GraphModal>
           </ContentContainerStyle>
           <NavBar />
           <MenuBar side="left" icon="search">
             <button
               type="button"
               onClick={() => {
-                dispatchModal(true);
+                dispatchModal('example');
               }}
             >
               Press to make a modal appear
@@ -49,7 +59,9 @@ const App = () => {
             <div>Hello</div>
           </MenuBar>
           <MenuBar side="bottom" icon="list">
-            <div>Hello</div>
+            <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
+              Neo4j Data
+            </button>
           </MenuBar>
         </AppContainer>
       </ModalContext.Provider>
