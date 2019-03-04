@@ -40,19 +40,20 @@ const App = () => {
     }
   }, [isShowingModal, isExpanded]);
 
-  function handleInsertIP(event) {
-    const { ipToInsert } = event;
+  function handleInsertIP(values, actions) {
+    const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`).catch(err => console.error(err));
+      axios.get(`/neo4j/insert/IP/${ipToInsert}`);
     }
+    actions.resetForm();
   }
 
-  function handleEnrichIP(event) {
-    console.log(event);
-    const { enrichmentType, ipToEnrich } = event;
+  function handleEnrichIP(values, actions) {
+    const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
       axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`);
     }
+    actions.resetForm();
   }
 
   return (
@@ -95,7 +96,6 @@ const App = () => {
                     Insert IP
                   </button>
                   <div>{errors.ipToInsert}</div>
-                  {/* Have to find a better way to show this */}
                 </form>
               )}
             />
