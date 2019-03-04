@@ -33,16 +33,27 @@ const App = () => {
   const [neo4jData, setNeo4jData] = useState('');
 
   useEffect(() => {
-    if (isShowingModal === 'Neo4j Data') {
+    if (isShowingModal === 'Neo4j Data' || isExpanded === 'left') {
       axios.get('/neo4j/export').then(({ data }) => {
         setNeo4jData(data);
       });
     }
-  }, [isShowingModal]);
+  }, [isShowingModal, isExpanded]);
 
-  function handleInsertIP({ ipToInsert }) {
-    console.log(ipToInsert);
-    axios.get(`/neo4j/insert/IP/${ipToInsert}`).catch(err => console.error(err));
+  function handleInsertIP(values, actions) {
+    const { ipToInsert } = values;
+    if (ipToInsert !== '') {
+      axios.get(`/neo4j/insert/IP/${ipToInsert}`);
+    }
+    actions.resetForm();
+  }
+
+  function handleEnrichIP(values, actions) {
+    const { enrichmentType, ipToEnrich } = values;
+    if (ipToEnrich !== 'none') {
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`);
+    }
+    actions.resetForm();
   }
 
   return (
@@ -56,6 +67,7 @@ const App = () => {
             }}
           >
             <p>Graph will go here!</p>
+            {/* Modals go here */}
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
             </GraphModal>
@@ -84,6 +96,37 @@ const App = () => {
                     Insert IP
                   </button>
                   <div>{errors.ipToInsert}</div>
+                </form>
+              )}
+            />
+            <Formik
+              onSubmit={handleEnrichIP}
+              initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
+              render={({ values, handleChange, handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                  <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
+                    <option value="asn">asn</option>
+                    <option value="gip">gip</option>
+                    <option value="hostname">hostname</option>
+                    <option value="whois">whois</option>
+                  </select>
+                  <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
+                    <option value="none">None</option>
+                    {neo4jData &&
+                      neo4jData.Neo4j[0].map(({ nodes }) =>
+                        nodes.map(({ properties, id }) => {
+                          return (
+                            properties.IP && (
+                              <option key={id} value={properties.IP} label={properties.IP}>
+                                {properties.IP}
+                              </option>
+                            )
+                          );
+                        })
+                      )}
+                  </select>
+                  <br />
+                  <button type="submit">Enrich IP</button>
                 </form>
               )}
             />
