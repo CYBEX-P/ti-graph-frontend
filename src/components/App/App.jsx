@@ -66,8 +66,7 @@ const App = () => {
               dispatchExpand('none');
             }}
           >
-            <p>Graph will go here!</p>
-            {/* Modals go here */}
+            <div id="mynetwork">Graph will go here!</div>
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
             </GraphModal>
