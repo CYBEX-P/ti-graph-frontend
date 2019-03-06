@@ -4,7 +4,8 @@ const Graph = () => (
   <div
     id="mynetwork"
     style={{
-      width: '100%'
+      width: '100%',
+      height: '600px'
     }}
   />
 );

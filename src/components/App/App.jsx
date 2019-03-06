@@ -52,7 +52,11 @@ const App = () => {
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`);
+      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
+        axios.get('neo4j/export').then(({ data }) => {
+          setNeo4jData(data);
+        });
+      });
     }
     actions.resetForm();
   }
@@ -60,7 +64,11 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`);
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(() => {
+        axios.get('neo4j/export').then(({ data }) => {
+          setNeo4jData(data);
+        });
+      });
     }
     actions.resetForm();
   }
@@ -87,6 +95,7 @@ const App = () => {
             onClick={() => {
               dispatchExpand('none');
             }}
+            side={isExpanded}
           >
             <Graph />
             <GraphModal title="example" contentLabel="Example Modal">
