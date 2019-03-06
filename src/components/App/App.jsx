@@ -2,6 +2,7 @@ import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import * as vis from 'vis';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
@@ -32,18 +33,12 @@ const App = () => {
 
   const [neo4jData, setNeo4jData] = useState('');
 
-  useEffect(() => {
-    if (isShowingModal === 'Neo4j Data' || isExpanded === 'left') {
-      axios.get('/neo4j/export').then(({ data }) => {
-        setNeo4jData(data);
-      });
-    }
-  }, [isShowingModal, isExpanded]);
-
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`);
+      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
+        UpdateGraph(neo4jData);
+      })
     }
     actions.resetForm();
   }
@@ -51,10 +46,36 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`);
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(() => {
+        UpdateGraph(neo4jData);
+      })
     }
     actions.resetForm();
   }
+
+  function UpdateGraph(data){
+    var dataObject = {
+        nodes: data['Neo4j'][0][0]['nodes'],
+        edges: data['Neo4j'][1][0]['edges']
+    };
+
+    var options = {layout: {improvedLayout: false}};
+    var container = document.getElementById("mynetwork");
+    var network = new vis.Network(container, dataObject, options);
+
+  }
+
+  useEffect(() => {
+    if (isShowingModal === 'Neo4j Data' || isExpanded === 'left') {
+      axios.get('/neo4j/export').then(({ data }) => {
+        setNeo4jData(data);
+        if (neo4jData != ''){
+          console.log(neo4jData);
+          UpdateGraph(neo4jData);
+        }
+      }) 
+    }
+  }, [isShowingModal, isExpanded]);
 
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
@@ -66,7 +87,7 @@ const App = () => {
               dispatchExpand('none');
             }}
           >
-            <div id="mynetwork">Graph will go here!</div>
+            <div id="mynetwork" style = {{position: "absolute", width: "50%",top: "20%" , height: "800px", border: "1px solid rgb(134, 29, 29)",left: "25%"}}></div>
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
             </GraphModal>
