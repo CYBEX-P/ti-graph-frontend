@@ -2,7 +2,7 @@ import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import * as vis from 'vis';
+import { Network } from 'vis';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
@@ -10,13 +10,29 @@ import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
 import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
+import Graph from '../Graph/Graph';
 
 const InsertIPSchema = Yup.object().shape({
   // IP Validation very rough
   ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
 });
 
+function UpdateGraph(data) {
+  const { nodes } = data.Neo4j[0][0];
+  const { edges } = data.Neo4j[1][0];
+  const dataObject = { nodes, edges };
+
+  const options = { layout: { improvedLayout: false } };
+  const container = document.getElementById('mynetwork');
+  (() => new Network(container, dataObject, options))();
+}
+
 const App = () => {
+  /**
+   * We should make it so that when we insert a node, we check /export
+   * until we find that the data updated.
+   */
+
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
     if (action === 'left' || action === 'right' || action === 'bottom') {
       return action;
@@ -36,9 +52,7 @@ const App = () => {
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
-        UpdateGraph(neo4jData);
-      })
+      axios.get(`/neo4j/insert/IP/${ipToInsert}`);
     }
     actions.resetForm();
   }
@@ -46,48 +60,35 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(() => {
-        UpdateGraph(neo4jData);
-      })
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`);
     }
     actions.resetForm();
   }
 
-  function UpdateGraph(data){
-    var dataObject = {
-        nodes: data['Neo4j'][0][0]['nodes'],
-        edges: data['Neo4j'][1][0]['edges']
-    };
-
-    var options = {layout: {improvedLayout: false}};
-    var container = document.getElementById("mynetwork");
-    var network = new vis.Network(container, dataObject, options);
-
-  }
-
+  // Get data on first render
   useEffect(() => {
-    if (isShowingModal === 'Neo4j Data' || isExpanded === 'left') {
-      axios.get('/neo4j/export').then(({ data }) => {
-        setNeo4jData(data);
-        if (neo4jData != ''){
-          console.log(neo4jData);
-          UpdateGraph(neo4jData);
-        }
-      }) 
+    axios.get('/neo4j/export').then(({ data }) => {
+      setNeo4jData(data);
+    });
+  }, []);
+
+  // Update graph whenever data updates
+  useEffect(() => {
+    if (neo4jData !== '') {
+      UpdateGraph(neo4jData);
     }
-  }, [isShowingModal, isExpanded]);
+  }, [neo4jData]);
 
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
         <AppContainer>
-          {/* Important to have content rendered under navbar and menubar */}
           <ContentContainerStyle
             onClick={() => {
               dispatchExpand('none');
             }}
           >
-            <div id="mynetwork" style = {{position: "absolute", width: "50%",top: "20%" , height: "800px", border: "1px solid rgb(134, 29, 29)",left: "25%"}}></div>
+            <Graph />
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
             </GraphModal>

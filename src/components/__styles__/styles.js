@@ -159,11 +159,10 @@ const MenuBarIconStyle = styled.div`
 `;
 
 const ContentContainerStyle = styled.div`
-  grid-row: 1 / span 5;
-  grid-column: 1 / span 5;
+  grid-row: 2 / span 3;
+  grid-column: 2 / span 3;
   display: grid;
-  align-content: center;
-  justify-content: center;
+  border: 1px solid #111111aa;
 `;
 
 const ModalContentStyle = styled.div`
