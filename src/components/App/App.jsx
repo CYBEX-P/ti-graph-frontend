@@ -64,10 +64,15 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(() => {
-        axios.get('neo4j/export').then(({ data }) => {
-          setNeo4jData(data);
-        });
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({data}) => {
+        if (data['Hostname insert status'] !== 0){
+          axios.get('neo4j/export').then(({ data }) => {
+            setNeo4jData(data);
+          });
+        }
+        else{
+          alert("Hostname lookup returned nothing.");
+        }
       });
     }
     actions.resetForm();
@@ -171,7 +176,11 @@ const App = () => {
             <button
               type="button"
               onClick={() => {
-                axios.get('/neo4j/wipe');
+                axios.get('/neo4j/wipe').then(() => {
+                  axios.get('/neo4j/export').then((data) => {
+                    setNeo4jData(data);
+                  })
+                })
               }}
             >
               Wipe DB
