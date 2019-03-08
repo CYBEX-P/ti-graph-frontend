@@ -28,11 +28,6 @@ function UpdateGraph(data) {
 }
 
 const App = () => {
-  /**
-   * We should make it so that when we insert a node, we check /export
-   * until we find that the data updated.
-   */
-
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
     if (action === 'left' || action === 'right' || action === 'bottom') {
       return action;
@@ -64,14 +59,13 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({data}) => {
-        if (data['Hostname insert status'] !== 0){
-          axios.get('neo4j/export').then(({ data }) => {
-            setNeo4jData(data);
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
+        if (data['Hostname insert status'] !== 0) {
+          axios.get('neo4j/export').then(response => {
+            setNeo4jData(response.data);
           });
-        }
-        else{
-          alert("Hostname lookup returned nothing.");
+        } else {
+          alert('Hostname lookup returned nothing.');
         }
       });
     }
@@ -100,7 +94,6 @@ const App = () => {
             onClick={() => {
               dispatchExpand('none');
             }}
-            side={isExpanded}
           >
             <Graph />
             <GraphModal title="example" contentLabel="Example Modal">
@@ -120,6 +113,8 @@ const App = () => {
             >
               Press to make a modal appear
             </button>
+          </MenuBar>
+          <MenuBar side="right" icon="edit">
             <Formik
               onSubmit={handleInsertIP}
               validationSchema={InsertIPSchema}
@@ -166,9 +161,6 @@ const App = () => {
               )}
             />
           </MenuBar>
-          <MenuBar side="right" icon="history">
-            <div>Hello</div>
-          </MenuBar>
           <MenuBar side="bottom" icon="list">
             <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
               Neo4j Data
@@ -177,10 +169,10 @@ const App = () => {
               type="button"
               onClick={() => {
                 axios.get('/neo4j/wipe').then(() => {
-                  axios.get('/neo4j/export').then((data) => {
+                  axios.get('/neo4j/export').then(data => {
                     setNeo4jData(data);
-                  })
-                })
+                  });
+                });
               }}
             >
               Wipe DB

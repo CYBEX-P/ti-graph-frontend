@@ -5,7 +5,7 @@ const Graph = () => (
     id="mynetwork"
     style={{
       width: '100%',
-      height: '600px'
+      height: '98vh'
     }}
   />
 );
