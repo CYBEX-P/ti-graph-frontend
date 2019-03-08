@@ -64,14 +64,13 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({data}) => {
-        if (data['Hostname insert status'] !== 0){
-          axios.get('neo4j/export').then(({ data }) => {
-            setNeo4jData(data);
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
+        if (data['Hostname insert status'] !== 0) {
+          axios.get('neo4j/export').then(response => {
+            setNeo4jData(response.data);
           });
-        }
-        else{
-          alert("Hostname lookup returned nothing.");
+        } else {
+          alert('Hostname lookup returned nothing.');
         }
       });
     }
@@ -100,7 +99,6 @@ const App = () => {
             onClick={() => {
               dispatchExpand('none');
             }}
-            side={isExpanded}
           >
             <Graph />
             <GraphModal title="example" contentLabel="Example Modal">
@@ -177,10 +175,10 @@ const App = () => {
               type="button"
               onClick={() => {
                 axios.get('/neo4j/wipe').then(() => {
-                  axios.get('/neo4j/export').then((data) => {
+                  axios.get('/neo4j/export').then(data => {
                     setNeo4jData(data);
-                  })
-                })
+                  });
+                });
               }}
             >
               Wipe DB
