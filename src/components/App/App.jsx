@@ -18,6 +18,7 @@ const InsertIPSchema = Yup.object().shape({
 });
 
 function UpdateGraph(data) {
+
   const { nodes } = data.Neo4j[0][0];
   const { edges } = data.Neo4j[1][0];
   const dataObject = { nodes, edges };
@@ -178,7 +179,7 @@ const App = () => {
               onClick={() => {
                 axios.get('/neo4j/wipe').then(() => {
                   axios.get('/neo4j/export').then((data) => {
-                    setNeo4jData(data);
+                    setNeo4jData(data.data);
                   })
                 })
               }}
