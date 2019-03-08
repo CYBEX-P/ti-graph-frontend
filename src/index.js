@@ -6,12 +6,13 @@ import {
   faChartBar,
   faBars,
   faSearch,
-  faHistory,
+  faEdit,
   faList,
   faChevronCircleRight,
   faChevronCircleLeft,
   faChevronCircleDown,
-  faTimes
+  faTimes,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
 // import SplashScreen from './components/SplashScreen/SplashScreen';
@@ -20,12 +21,13 @@ library.add(
   faChartBar,
   faBars,
   faSearch,
-  faHistory,
+  faEdit,
   faList,
   faChevronCircleRight,
   faChevronCircleLeft,
   faChevronCircleDown,
-  faTimes
+  faTimes,
+  faUser
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

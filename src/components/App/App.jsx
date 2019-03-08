@@ -11,6 +11,7 @@ import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
+import NetworkContext from './NetworkContext';
 
 const InsertIPSchema = Yup.object().shape({
   // IP Validation very rough
@@ -25,17 +26,13 @@ function UpdateGraph(data) {
 
   const options = { layout: { improvedLayout: false } };
   const container = document.getElementById('mynetwork');
-  (() => new Network(container, dataObject, options))();
+  const network = new Network(container, dataObject, options);
+  return network;
 }
 
 const App = () => {
-  /**
-   * We should make it so that when we insert a node, we check /export
-   * until we find that the data updated.
-   */
-
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
-    if (action === 'left' || action === 'right' || action === 'bottom') {
+    if (action === 'left' || action === 'right' || action === 'bottom' || action === 'top') {
       return action;
     }
     return 'none';
@@ -49,6 +46,8 @@ const App = () => {
   }, false);
 
   const [neo4jData, setNeo4jData] = useState('');
+
+  const [network, setNetwork] = useState(null);
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
@@ -65,14 +64,13 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({data}) => {
-        if (data['Hostname insert status'] !== 0){
-          axios.get('neo4j/export').then(({ data }) => {
-            setNeo4jData(data);
+      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
+        if (data['Hostname insert status'] !== 0) {
+          axios.get('neo4j/export').then(response => {
+            setNeo4jData(response.data);
           });
-        }
-        else{
-          alert("Hostname lookup returned nothing.");
+        } else {
+          alert('Hostname lookup returned nothing.');
         }
       });
     }
@@ -89,105 +87,113 @@ const App = () => {
   // Update graph whenever data updates
   useEffect(() => {
     if (neo4jData !== '') {
-      UpdateGraph(neo4jData);
+      setNetwork(UpdateGraph(neo4jData));
     }
   }, [neo4jData]);
 
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
-        <AppContainer>
-          <ContentContainerStyle
-            onClick={() => {
-              dispatchExpand('none');
-            }}
-            side={isExpanded}
-          >
-            <Graph />
-            <GraphModal title="example" contentLabel="Example Modal">
-              <div>Content will go here soon!</div>
-            </GraphModal>
-            <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
-              <div>{JSON.stringify(neo4jData)}</div>
-            </GraphModal>
-          </ContentContainerStyle>
-          <NavBar />
-          <MenuBar side="left" icon="search">
-            <button
-              type="button"
+        <NetworkContext.Provider value={{ network }}>
+          <AppContainer>
+            <ContentContainerStyle
               onClick={() => {
-                dispatchModal('example');
-              }}
-            >
-              Press to make a modal appear
-            </button>
-            <Formik
-              onSubmit={handleInsertIP}
-              validationSchema={InsertIPSchema}
-              initialValues={{ ipToInsert: '' }}
-              render={({ handleChange, errors, values, handleSubmit }) => (
-                <form onSubmit={handleSubmit}>
-                  <input name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
-                  <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
-                    Insert IP
-                  </button>
-                  <div>{errors.ipToInsert}</div>
-                </form>
-              )}
-            />
-            <Formik
-              onSubmit={handleEnrichIP}
-              initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
-              render={({ values, handleChange, handleSubmit }) => (
-                <form onSubmit={handleSubmit}>
-                  <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
-                    <option value="asn">asn</option>
-                    <option value="gip">gip</option>
-                    <option value="hostname">hostname</option>
-                    <option value="whois">whois</option>
-                  </select>
-                  <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
-                    <option value="none">None</option>
-                    {neo4jData &&
-                      neo4jData.Neo4j[0].map(({ nodes }) =>
-                        nodes.map(({ properties, id }) => {
-                          return (
-                            properties.IP && (
-                              <option key={id} value={properties.IP} label={properties.IP}>
-                                {properties.IP}
-                              </option>
-                            )
-                          );
-                        })
-                      )}
-                  </select>
-                  <br />
-                  <button type="submit">Enrich IP</button>
-                </form>
-              )}
-            />
-          </MenuBar>
-          <MenuBar side="right" icon="history">
-            <div>Hello</div>
-          </MenuBar>
-          <MenuBar side="bottom" icon="list">
-            <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
-              Neo4j Data
-            </button>
-            <button
-              type="button"
-              onClick={() => {
+<<<<<<< HEAD
                 axios.get('/neo4j/wipe').then(() => {
                   axios.get('/neo4j/export').then((data) => {
                     setNeo4jData(data.data);
                   })
                 })
+=======
+                dispatchExpand('none');
+>>>>>>> a8666c7476657d0cbffbca5479880eaa4dcc206f
               }}
             >
-              Wipe DB
-            </button>
-          </MenuBar>
-        </AppContainer>
+              <Graph />
+              <GraphModal title="example" contentLabel="Example Modal">
+                <div>Content will go here soon!</div>
+              </GraphModal>
+              <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
+                <div>{JSON.stringify(neo4jData)}</div>
+              </GraphModal>
+            </ContentContainerStyle>
+            <NavBar />
+            <MenuBar side="left" icon="search">
+              <button
+                type="button"
+                onClick={() => {
+                  dispatchModal('example');
+                }}
+              >
+                Press to make a modal appear
+              </button>
+            </MenuBar>
+            <MenuBar side="right" icon="edit">
+              <Formik
+                onSubmit={handleInsertIP}
+                validationSchema={InsertIPSchema}
+                initialValues={{ ipToInsert: '' }}
+                render={({ handleChange, errors, values, handleSubmit }) => (
+                  <form onSubmit={handleSubmit}>
+                    <input name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+                    <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
+                      Insert IP
+                    </button>
+                    <div>{errors.ipToInsert}</div>
+                  </form>
+                )}
+              />
+              <Formik
+                onSubmit={handleEnrichIP}
+                initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
+                render={({ values, handleChange, handleSubmit }) => (
+                  <form onSubmit={handleSubmit}>
+                    <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
+                      <option value="asn">asn</option>
+                      <option value="gip">gip</option>
+                      <option value="hostname">hostname</option>
+                      <option value="whois">whois</option>
+                    </select>
+                    <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
+                      <option value="none">None</option>
+                      {neo4jData &&
+                        neo4jData.Neo4j[0].map(({ nodes }) =>
+                          nodes.map(({ properties, id }) => {
+                            return (
+                              properties.IP && (
+                                <option key={id} value={properties.IP} label={properties.IP}>
+                                  {properties.IP}
+                                </option>
+                              )
+                            );
+                          })
+                        )}
+                    </select>
+                    <br />
+                    <button type="submit">Enrich IP</button>
+                  </form>
+                )}
+              />
+            </MenuBar>
+            <MenuBar side="bottom" icon="list">
+              <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
+                Neo4j Data
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  axios.get('/neo4j/wipe').then(() => {
+                    axios.get('/neo4j/export').then(data => {
+                      setNeo4jData(data);
+                    });
+                  });
+                }}
+              >
+                Wipe DB
+              </button>
+            </MenuBar>
+          </AppContainer>
+        </NetworkContext.Provider>
       </ModalContext.Provider>
     </MenuContext.Provider>
   );
