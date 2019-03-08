@@ -27,6 +27,7 @@ const SplashScreenBody = styled.div`
 `;
 
 const NavBarStyle = styled.nav`
+  z-index: 6;
   width: 100%;
   background-color: ${primaryBlue};
   height: 56px;
@@ -47,6 +48,7 @@ const UnstyledButton = styled.button`
 
 const MenuBarStyle = styled(UnstyledButton)`
   background-color: ${primaryLightBlue};
+  z-index: 6;
   ${props => {
     if (props.side === 'left') {
       return `
@@ -161,9 +163,8 @@ const MenuBarIconStyle = styled.div`
 
 const ContentContainerStyle = styled.div`
   display: grid;
-  border: 1px solid #111111aa;
-  grid-row: 2 / span 3;
-  grid-column: 2 / span 3;
+  grid-row: 1 / span 5;
+  grid-column: 1 / span 5;
 `;
 
 const ModalContentStyle = styled.div`

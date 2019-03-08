@@ -28,11 +28,6 @@ function UpdateGraph(data) {
 }
 
 const App = () => {
-  /**
-   * We should make it so that when we insert a node, we check /export
-   * until we find that the data updated.
-   */
-
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
     if (action === 'left' || action === 'right' || action === 'bottom') {
       return action;
@@ -118,6 +113,8 @@ const App = () => {
             >
               Press to make a modal appear
             </button>
+          </MenuBar>
+          <MenuBar side="right" icon="edit">
             <Formik
               onSubmit={handleInsertIP}
               validationSchema={InsertIPSchema}
@@ -163,9 +160,6 @@ const App = () => {
                 </form>
               )}
             />
-          </MenuBar>
-          <MenuBar side="right" icon="history">
-            <div>Hello</div>
           </MenuBar>
           <MenuBar side="bottom" icon="list">
             <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
