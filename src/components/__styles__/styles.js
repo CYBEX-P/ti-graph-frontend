@@ -175,6 +175,22 @@ const ModalContentStyle = styled.div`
   grid-template-columns: auto 36px;
 `;
 
+const StyledButton = styled.button`
+  display: flex;
+  border: none;
+  margin: 0;
+  background: ${primaryBlue};
+  text-align: center;
+  border-radius: 4px;
+  height: 56px;
+  color: ${secondaryGrey};
+  justify-content: center;
+`;
+
+const StyledButtonChild = styled.div`
+  ${props => (props.hasIcon && props.index === 0 ? 'flex-grow: 1' : 'flex-grow: 2')}
+`;
+
 export {
   AppContainer,
   SplashScreenBody,
@@ -185,5 +201,7 @@ export {
   MenuBarChildStyle,
   MenuBarIconStyle,
   ContentContainerStyle,
-  ModalContentStyle
+  ModalContentStyle,
+  StyledButton,
+  StyledButtonChild
 };

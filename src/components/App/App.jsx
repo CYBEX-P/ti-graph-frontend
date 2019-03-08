@@ -12,6 +12,8 @@ import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
 import NetworkContext from './NetworkContext';
+import Button from '../Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const InsertIPSchema = Yup.object().shape({
   // IP Validation very rough
@@ -97,11 +99,7 @@ const App = () => {
           <AppContainer>
             <ContentContainerStyle
               onClick={() => {
-                axios.get('/neo4j/wipe').then(() => {
-                  axios.get('/neo4j/export').then(({ data }) => {
-                    setNeo4jData(data);
-                  });
-                });
+                dispatchExpand('none');
               }}
             >
               <Graph />
@@ -124,51 +122,57 @@ const App = () => {
               </button>
             </MenuBar>
             <MenuBar side="right" icon="edit">
-              <Formik
-                onSubmit={handleInsertIP}
-                validationSchema={InsertIPSchema}
-                initialValues={{ ipToInsert: '' }}
-                render={({ handleChange, errors, values, handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
-                    <input name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
-                    <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
-                      Insert IP
-                    </button>
-                    <div>{errors.ipToInsert}</div>
-                  </form>
-                )}
-              />
-              <Formik
-                onSubmit={handleEnrichIP}
-                initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
-                render={({ values, handleChange, handleSubmit }) => (
-                  <form onSubmit={handleSubmit}>
-                    <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
-                      <option value="asn">asn</option>
-                      <option value="gip">gip</option>
-                      <option value="hostname">hostname</option>
-                      <option value="whois">whois</option>
-                    </select>
-                    <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
-                      <option value="none">None</option>
-                      {neo4jData &&
-                        neo4jData.Neo4j[0].map(({ nodes }) =>
-                          nodes.map(({ properties, id }) => {
-                            return (
-                              properties.IP && (
-                                <option key={id} value={properties.IP} label={properties.IP}>
-                                  {properties.IP}
-                                </option>
-                              )
-                            );
-                          })
-                        )}
-                    </select>
-                    <br />
-                    <button type="submit">Enrich IP</button>
-                  </form>
-                )}
-              />
+              <div style={{ width: '100%', height: '100%', backgroundColor: '#e0e0e0' }}>
+                <Formik
+                  onSubmit={handleInsertIP}
+                  validationSchema={InsertIPSchema}
+                  initialValues={{ ipToInsert: '' }}
+                  render={({ handleChange, errors, values, handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                      <input name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+                      {/* <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
+                        Insert IP
+                      </button> */}
+                      <Button hasIcon type="submit" onClickFunction={() => {}}>
+                        <FontAwesomeIcon icon="plus-circle" />
+                        <div>Insert IP</div>
+                      </Button>
+                      <div>{errors.ipToInsert}</div>
+                    </form>
+                  )}
+                />
+                <Formik
+                  onSubmit={handleEnrichIP}
+                  initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
+                  render={({ values, handleChange, handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                      <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
+                        <option value="asn">asn</option>
+                        <option value="gip">gip</option>
+                        <option value="hostname">hostname</option>
+                        <option value="whois">whois</option>
+                      </select>
+                      <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
+                        <option value="none">None</option>
+                        {neo4jData &&
+                          neo4jData.Neo4j[0].map(({ nodes }) =>
+                            nodes.map(({ properties, id }) => {
+                              return (
+                                properties.IP && (
+                                  <option key={id} value={properties.IP} label={properties.IP}>
+                                    {properties.IP}
+                                  </option>
+                                )
+                              );
+                            })
+                          )}
+                      </select>
+                      <br />
+                      <button type="submit">Enrich IP</button>
+                    </form>
+                  )}
+                />
+              </div>
             </MenuBar>
             <MenuBar side="bottom" icon="list">
               <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
