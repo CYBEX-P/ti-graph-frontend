@@ -6,7 +6,6 @@ import NetworkContext from '../App/NetworkContext';
 const Graph = () => {
   const { network } = useContext(NetworkContext);
   const [selection, setSelection] = useState(null);
-  console.log(selection);
   return (
     <div
       id="mynetwork"

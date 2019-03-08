@@ -37,6 +37,7 @@ const GraphModal = ({ contentLabel, children, title }) => {
       isOpen={isShowingModal === title}
       onAfterOpen={() => dispatchExpand('none')}
       contentLabel={contentLabel}
+      style={{ overlay: { zIndex: 10 } }}
     >
       <ModalContentStyle>
         <TitleStyle>{title}</TitleStyle>
