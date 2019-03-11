@@ -7,11 +7,14 @@ const Button = props => {
   const { onClickFunction, children, type, hasIcon } = props;
   return (
     <StyledButton type={type} onClick={onClickFunction}>
-      {children.map((child, index) => (
-        <StyledButtonChild key={`${child}__${index}`} hasIcon={hasIcon} index={index}>
-          {child}
-        </StyledButtonChild>
-      ))}
+      {Array.isArray(children)
+        ? children.map((child, index) => (
+            // eslint-disable-next-line react/jsx-indent
+            <StyledButtonChild key={`${child}__${index}`} hasIcon={hasIcon} index={index}>
+              {child}
+            </StyledButtonChild>
+          ))
+        : children}
     </StyledButton>
   );
 };
