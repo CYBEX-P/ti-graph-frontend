@@ -3,17 +3,17 @@ import axios from 'axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Network } from 'vis';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
-import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
+import { AppContainer, ContentContainerStyle, GraphMenuInputStyle } from '../__styles__/styles';
 import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
 import NetworkContext from './NetworkContext';
 import Button from '../Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const InsertIPSchema = Yup.object().shape({
   // IP Validation very rough
@@ -71,6 +71,7 @@ const App = () => {
             setNeo4jData(response.data);
           });
         } else {
+          // Switch this to a modal
           alert('Hostname lookup returned nothing.');
         }
       });
@@ -95,7 +96,7 @@ const App = () => {
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
-        <NetworkContext.Provider value={{ network }}>
+        <NetworkContext.Provider value={{ network, neo4jData }}>
           <AppContainer>
             <ContentContainerStyle
               onClick={() => {
@@ -129,7 +130,12 @@ const App = () => {
                   initialValues={{ ipToInsert: '' }}
                   render={({ handleChange, errors, values, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                      <input name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+                      <GraphMenuInputStyle
+                        placeholder="IP Address"
+                        name="ipToInsert"
+                        value={values.ipToInsert}
+                        onChange={handleChange}
+                      />
                       {/* <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
                         Insert IP
                       </button> */}
@@ -141,18 +147,29 @@ const App = () => {
                     </form>
                   )}
                 />
+                <br />
                 <Formik
                   onSubmit={handleEnrichIP}
-                  initialValues={{ ipToEnrich: '', enrichmentType: 'asn' }}
+                  initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
                   render={({ values, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                      <select name="enrichmentType" value={values.enrichmentType} onChange={handleChange}>
+                      <select
+                        style={{ width: '50%', height: '36px', backgroundColor: '#ffffff' }}
+                        name="enrichmentType"
+                        value={values.enrichmentType}
+                        onChange={handleChange}
+                      >
                         <option value="asn">asn</option>
                         <option value="gip">gip</option>
                         <option value="hostname">hostname</option>
                         <option value="whois">whois</option>
                       </select>
-                      <select name="ipToEnrich" value={values.ipToEnrich} onChange={handleChange}>
+                      <select
+                        style={{ width: '30%', height: '36px' }}
+                        name="ipToEnrich"
+                        value={values.ipToEnrich}
+                        onChange={handleChange}
+                      >
                         <option value="none">None</option>
                         {neo4jData &&
                           neo4jData.Neo4j[0].map(({ nodes }) =>
@@ -168,7 +185,9 @@ const App = () => {
                           )}
                       </select>
                       <br />
-                      <button type="submit">Enrich IP</button>
+                      <Button type="submit" onClickFunction={() => {}}>
+                        Enrich IP
+                      </Button>
                     </form>
                   )}
                 />

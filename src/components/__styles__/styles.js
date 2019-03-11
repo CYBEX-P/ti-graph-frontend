@@ -180,15 +180,22 @@ const StyledButton = styled.button`
   border: none;
   margin: 0;
   background: ${primaryBlue};
-  text-align: center;
   border-radius: 4px;
   height: 56px;
+  width: 80%;
   color: ${secondaryGrey};
   justify-content: center;
 `;
 
 const StyledButtonChild = styled.div`
-  ${props => (props.hasIcon && props.index === 0 ? 'flex-grow: 1' : 'flex-grow: 2')}
+  ${props => (props.hasIcon && props.index === 0 ? 'flex-grow: 0' : 'flex-grow: 2')}
+`;
+
+const GraphMenuInputStyle = styled.input`
+  height: 36px;
+  width: 80%;
+  border-radius: 4px;
+  text-align: center;
 `;
 
 export {
@@ -203,5 +210,6 @@ export {
   ContentContainerStyle,
   ModalContentStyle,
   StyledButton,
-  StyledButtonChild
+  StyledButtonChild,
+  GraphMenuInputStyle
 };
