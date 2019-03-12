@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { StyledButton, StyledButtonChild } from '../__styles__/styles';
 
 const Button = props => {
-  const { onClickFunction, children, type, hasIcon } = props;
+  const { onClickFunction, children, type, hasIcon, width } = props;
   return (
-    <StyledButton type={type} onClick={onClickFunction}>
+    <StyledButton width={width} type={type} onClick={onClickFunction}>
       {Array.isArray(children)
         ? children.map((child, index) => (
             // eslint-disable-next-line react/jsx-indent
@@ -23,13 +23,15 @@ Button.propTypes = {
   children: PropTypes.node,
   onClickFunction: PropTypes.func.isRequired,
   type: PropTypes.oneOf(['submit', 'button']),
-  hasIcon: PropTypes.bool
+  hasIcon: PropTypes.bool,
+  width: PropTypes.string
 };
 
 Button.defaultProps = {
   children: <></>,
   type: 'button',
-  hasIcon: false
+  hasIcon: false,
+  width: '80%'
 };
 
 export default Button;

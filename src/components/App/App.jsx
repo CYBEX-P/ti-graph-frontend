@@ -98,11 +98,7 @@ const App = () => {
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
         <NetworkContext.Provider value={{ network, neo4jData }}>
           <AppContainer>
-            <ContentContainerStyle
-              onClick={() => {
-                dispatchExpand('none');
-              }}
-            >
+            <ContentContainerStyle>
               <Graph />
               <GraphModal title="example" contentLabel="Example Modal">
                 <div>Content will go here soon!</div>
@@ -140,7 +136,7 @@ const App = () => {
                         Insert IP
                       </button> */}
                       <Button hasIcon type="submit" onClickFunction={() => {}}>
-                        <FontAwesomeIcon icon="plus-circle" />
+                        <FontAwesomeIcon size="lg" icon="plus-circle" />
                         <div>Insert IP</div>
                       </Button>
                       <div>{errors.ipToInsert}</div>
@@ -154,7 +150,7 @@ const App = () => {
                   render={({ values, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                       <select
-                        style={{ width: '50%', height: '36px', backgroundColor: '#ffffff' }}
+                        style={{ width: '50%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
                         name="enrichmentType"
                         value={values.enrichmentType}
                         onChange={handleChange}
@@ -165,7 +161,7 @@ const App = () => {
                         <option value="whois">whois</option>
                       </select>
                       <select
-                        style={{ width: '30%', height: '36px' }}
+                        style={{ width: '30%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
                         name="ipToEnrich"
                         value={values.ipToEnrich}
                         onChange={handleChange}
@@ -194,21 +190,37 @@ const App = () => {
               </div>
             </MenuBar>
             <MenuBar side="bottom" icon="list">
-              <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
-                Neo4j Data
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  axios.get('/neo4j/wipe').then(() => {
-                    axios.get('/neo4j/export').then(({ data }) => {
-                      setNeo4jData(data);
-                    });
-                  });
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: '#e0e0e0',
+                  alignContent: 'flex-start'
                 }}
               >
-                Wipe DB
-              </button>
+                <Button width="100%" hasIcon onClickFunction={() => {}}>
+                  <FontAwesomeIcon size="lg" icon="server" />
+                  Database Management
+                </Button>
+                <Button width="50%" type="button" onClickFunction={() => dispatchModal('Neo4j Data')}>
+                  Neo4j Data
+                </Button>
+                <Button
+                  type="button"
+                  onClickFunction={() => {
+                    axios.get('/neo4j/wipe').then(() => {
+                      axios.get('/neo4j/export').then(({ data }) => {
+                        setNeo4jData(data);
+                      });
+                    });
+                  }}
+                  width="50%"
+                >
+                  Wipe DB
+                </Button>
+              </div>
             </MenuBar>
           </AppContainer>
         </NetworkContext.Provider>

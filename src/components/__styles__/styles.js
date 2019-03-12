@@ -159,6 +159,11 @@ const MenuBarIconStyle = styled.div`
     return 2;
   }};
   grid-row: 1;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  justify-content: center;
+  align-content: center;
 `;
 
 const ContentContainerStyle = styled.div`
@@ -182,9 +187,11 @@ const StyledButton = styled.button`
   background: ${primaryBlue};
   border-radius: 4px;
   height: 56px;
-  width: 80%;
+  width: ${props => props.width || '80%'};
+  border: 1px solid ${primaryDarkBlue};
   color: ${secondaryGrey};
   justify-content: center;
+  align-content: center;
 `;
 
 const StyledButtonChild = styled.div`
