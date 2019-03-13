@@ -39,8 +39,11 @@ const Graph = () => {
       })[0];
 
       const { properties } = matchingNeo4jData;
-
-      setInfoPositions(domPositions);
+      if (infoPositions !== null && domPositions.x === infoPositions.x && domPositions.y === infoPositions.y) {
+        setInfoPositions(null);
+      } else {
+        setInfoPositions(domPositions);
+      }
       return setSelectedNodeData(`${JSON.stringify(properties)}`);
     }
     setInfoPositions(null);
