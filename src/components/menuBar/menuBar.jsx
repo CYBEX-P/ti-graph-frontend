@@ -21,7 +21,7 @@ const MenuBar = props => {
       {isExpanded === side ? (
         <ExpandedMenuBar side={side}>
           <MenuBarChildStyle side={side}>{children}</MenuBarChildStyle>
-          <MenuBarIconStyle side={side}>
+          <MenuBarIconStyle onClick={() => dispatchExpand('none')} side={side}>
             <UnstyledButton
               onClick={() => {
                 dispatchExpand('none');

@@ -13,7 +13,8 @@ import {
   faChevronCircleDown,
   faTimes,
   faUser,
-  faPlusCircle
+  faPlusCircle,
+  faServer
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
 // import SplashScreen from './components/SplashScreen/SplashScreen';
@@ -29,7 +30,8 @@ library.add(
   faChevronCircleDown,
   faTimes,
   faUser,
-  faPlusCircle
+  faPlusCircle,
+  faServer
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));

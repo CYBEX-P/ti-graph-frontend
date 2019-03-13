@@ -98,11 +98,7 @@ const App = () => {
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
         <NetworkContext.Provider value={{ network, neo4jData }}>
           <AppContainer>
-            <ContentContainerStyle
-              onClick={() => {
-                dispatchExpand('none');
-              }}
-            >
+            <ContentContainerStyle>
               <Graph />
               <GraphModal title="example" contentLabel="Example Modal">
                 <div>Content will go here soon!</div>
@@ -123,7 +119,17 @@ const App = () => {
               </button>
             </MenuBar>
             <MenuBar side="right" icon="edit">
-              <div style={{ width: '100%', height: '100%', backgroundColor: '#e0e0e0' }}>
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#e0e0e0',
+                  display: 'grid',
+                  gridTemplateRows: '150px 110px 70px auto',
+                  justifyContent: 'center',
+                  gridTemplateColumns: '80%'
+                }}
+              >
                 <Formik
                   onSubmit={handleInsertIP}
                   validationSchema={InsertIPSchema}
@@ -136,25 +142,21 @@ const App = () => {
                         value={values.ipToInsert}
                         onChange={handleChange}
                       />
-                      {/* <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
-                        Insert IP
-                      </button> */}
-                      <Button hasIcon type="submit" onClickFunction={() => {}}>
-                        <FontAwesomeIcon icon="plus-circle" />
+                      <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
+                        <FontAwesomeIcon size="lg" icon="plus-circle" />
                         <div>Insert IP</div>
                       </Button>
-                      <div>{errors.ipToInsert}</div>
+                      <div style={{ color: '#ff4500' }}>{errors.ipToInsert}</div>
                     </form>
                   )}
                 />
-                <br />
                 <Formik
                   onSubmit={handleEnrichIP}
                   initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
                   render={({ values, handleChange, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                       <select
-                        style={{ width: '50%', height: '36px', backgroundColor: '#ffffff' }}
+                        style={{ width: '30%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
                         name="enrichmentType"
                         value={values.enrichmentType}
                         onChange={handleChange}
@@ -165,7 +167,7 @@ const App = () => {
                         <option value="whois">whois</option>
                       </select>
                       <select
-                        style={{ width: '30%', height: '36px' }}
+                        style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
                         name="ipToEnrich"
                         value={values.ipToEnrich}
                         onChange={handleChange}
@@ -184,31 +186,57 @@ const App = () => {
                             })
                           )}
                       </select>
-                      <br />
-                      <Button type="submit" onClickFunction={() => {}}>
+                      <Button width="100%" type="submit" onClickFunction={() => {}}>
                         Enrich IP
                       </Button>
                     </form>
                   )}
                 />
+                <Button width="100%" onClickFunction={() => axios.get('/enrich/all')}>
+                  Enrich All
+                </Button>
               </div>
             </MenuBar>
             <MenuBar side="bottom" icon="list">
-              <button type="button" onClick={() => dispatchModal('Neo4j Data')}>
-                Neo4j Data
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  axios.get('/neo4j/wipe').then(() => {
-                    axios.get('/neo4j/export').then(({ data }) => {
-                      setNeo4jData(data);
-                    });
-                  });
+              <div
+                style={{
+                  display: 'grid',
+                  flexWrap: 'wrap',
+                  height: '100%',
+                  width: '100%',
+                  backgroundColor: '#e0e0e0',
+                  gridTemplateRows: '70px 70px auto',
+                  gridTemplateColumns: '50% 50%',
+                  justifyContent: 'center'
                 }}
               >
-                Wipe DB
-              </button>
+                <div style={{ gridColumn: '1 / span 2' }}>
+                  <Button width="100%" hasIcon onClickFunction={() => {}}>
+                    <FontAwesomeIcon size="lg" icon="server" />
+                    Database Management
+                  </Button>
+                </div>
+                <div style={{ gridColumn: 1 }}>
+                  <Button width="40%" type="button" onClickFunction={() => dispatchModal('Neo4j Data')}>
+                    Neo4j Data
+                  </Button>
+                </div>
+                <div style={{ gridColumn: 2 }}>
+                  <Button
+                    type="button"
+                    onClickFunction={() => {
+                      axios.get('/neo4j/wipe').then(() => {
+                        axios.get('/neo4j/export').then(({ data }) => {
+                          setNeo4jData(data);
+                        });
+                      });
+                    }}
+                    width="40%"
+                  >
+                    Wipe DB
+                  </Button>
+                </div>
+              </div>
             </MenuBar>
           </AppContainer>
         </NetworkContext.Provider>
