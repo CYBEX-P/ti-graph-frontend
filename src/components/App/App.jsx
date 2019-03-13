@@ -119,7 +119,17 @@ const App = () => {
               </button>
             </MenuBar>
             <MenuBar side="right" icon="edit">
-              <div style={{ width: '100%', height: '100%', backgroundColor: '#e0e0e0' }}>
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#e0e0e0',
+                  display: 'grid',
+                  gridTemplateRows: '150px 110px 70px auto',
+                  justifyContent: 'center',
+                  gridTemplateColumns: '80%'
+                }}
+              >
                 <Formik
                   onSubmit={handleInsertIP}
                   validationSchema={InsertIPSchema}
@@ -132,18 +142,14 @@ const App = () => {
                         value={values.ipToInsert}
                         onChange={handleChange}
                       />
-                      {/* <button type="submit" disabled={!(errors.ipToInsert === undefined)}>
-                        Insert IP
-                      </button> */}
-                      <Button hasIcon type="submit" onClickFunction={() => {}}>
+                      <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
                         <FontAwesomeIcon size="lg" icon="plus-circle" />
                         <div>Insert IP</div>
                       </Button>
-                      <div>{errors.ipToInsert}</div>
+                      <div style={{ color: '#ff4500' }}>{errors.ipToInsert}</div>
                     </form>
                   )}
                 />
-                <br />
                 <Formik
                   onSubmit={handleEnrichIP}
                   initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
@@ -161,7 +167,7 @@ const App = () => {
                         <option value="whois">whois</option>
                       </select>
                       <select
-                        style={{ width: '50%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
+                        style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
                         name="ipToEnrich"
                         value={values.ipToEnrich}
                         onChange={handleChange}
@@ -180,14 +186,15 @@ const App = () => {
                             })
                           )}
                       </select>
-                      <br />
-                      <Button type="submit" onClickFunction={() => {}}>
+                      <Button width="100%" type="submit" onClickFunction={() => {}}>
                         Enrich IP
                       </Button>
                     </form>
                   )}
                 />
-                <Button onClickFunction={() => axios.get('/enrich/all')}>Enrich All</Button>
+                <Button width="100%" onClickFunction={() => axios.get('/enrich/all')}>
+                  Enrich All
+                </Button>
               </div>
             </MenuBar>
             <MenuBar side="bottom" icon="list">

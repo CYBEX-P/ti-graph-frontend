@@ -201,9 +201,11 @@ const StyledButtonChild = styled.div`
 
 const GraphMenuInputStyle = styled.input`
   height: 36px;
-  width: 80%;
+  width: 100%;
   border-radius: 4px;
   text-align: center;
+  background-color: #ffffff;
+  color: #111111;
 `;
 
 export {
