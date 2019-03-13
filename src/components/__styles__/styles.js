@@ -192,6 +192,7 @@ const StyledButton = styled.button`
   color: ${secondaryGrey};
   justify-content: center;
   align-content: center;
+  box-shadow: 1px 2px 4px 2px #33333355;
 `;
 
 const StyledButtonChild = styled.div`
