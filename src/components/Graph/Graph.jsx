@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+
 import NetworkContext from '../App/NetworkContext';
 
 const Graph = () => {
@@ -35,7 +37,15 @@ const Graph = () => {
         }}
         onClick={() => setSelection(network.getSelection())}
       />
-      <div style={{ gridRow: 2, gridColumn: 1, zIndex: 5, justifySelf: 'center', alignSelf: 'center' }}>
+      <div
+        style={{
+          gridRow: 2,
+          gridColumn: 1,
+          zIndex: 5,
+          justifySelf: 'center',
+          alignSelf: 'center'
+        }}
+      >
         {selectedNodeData}
       </div>
     </div>
