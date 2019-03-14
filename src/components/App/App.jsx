@@ -192,7 +192,12 @@ const App = () => {
                     </form>
                   )}
                 />
-                <Button width="100%" onClickFunction={() => axios.get('/enrich/all')}>
+                <Button width="100%" 
+                onClickFunction={() => axios.get('/enrich/all').then(() => {
+                          axios.get('/neo4j/export').then(({ data }) => {
+                            setNeo4jData(data);
+                          });
+                  })}>
                   Enrich All
                 </Button>
               </div>
