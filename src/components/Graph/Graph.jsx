@@ -63,17 +63,6 @@ const Graph = () => {
         }}
         onClick={() => network !== null && setSelection(network.getSelection())}
       />
-      <div
-        style={{
-          gridRow: 2,
-          gridColumn: 1,
-          zIndex: 5,
-          justifySelf: 'center',
-          alignSelf: 'center'
-        }}
-      >
-        {selectedNodeData}
-      </div>
       {infoPositions && (
         <NodeInfoDiv position={infoPositions}>
           {selectedNodeData}
