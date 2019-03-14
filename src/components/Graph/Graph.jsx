@@ -61,7 +61,7 @@ const Graph = () => {
           gridColumn: 1,
           zIndex: 2
         }}
-        onClick={() => setSelection(network.getSelection())}
+        onClick={() => network !== null && setSelection(network.getSelection())}
       />
       <div
         style={{
