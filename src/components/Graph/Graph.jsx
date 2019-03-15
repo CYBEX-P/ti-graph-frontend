@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import { FadeLoader } from 'react-spinners';
 
 import NetworkContext from '../App/NetworkContext';
 import Button from '../Button/Button';
@@ -18,10 +20,10 @@ const NodeInfoDiv = styled.div`
   justify-content: center;
   z-index: 2;
   pointer-events: none;
-  box-shadow: 1px 1px 4px 2px #11111133;
+  box-shadow: 1px 1px 4px 2px #11111155;
 `;
 
-const Graph = () => {
+const Graph = ({ isLoading }) => {
   const { network, neo4jData } = useContext(NetworkContext);
   const [selection, setSelection] = useState({ nodes: [], edges: [] });
   const [infoPositions, setInfoPositions] = useState(null);
@@ -50,33 +52,44 @@ const Graph = () => {
     return setSelectedNodeData(null);
   }, [selection]);
   return (
-    <div style={{ display: 'grid', gridTemplateRows: 'auto 40px 36px' }}>
+    <div style={{ display: 'grid', gridTemplateRows: '56px auto' }}>
       <div
         id="mynetwork"
         role="presentation"
         style={{
           width: '100%',
           height: '99vh',
-          gridRow: '1 / span 3',
+          gridRow: '1 / span 2',
           gridColumn: 1,
-          zIndex: 2
+          zIndex: 2,
+          display: 'grid'
         }}
-        onClick={() => setSelection(network.getSelection())}
+        onClick={() => network !== null && setSelection(network.getSelection())}
       />
-      <div
-        style={{
-          gridRow: 2,
-          gridColumn: 1,
-          zIndex: 5,
-          justifySelf: 'center',
-          alignSelf: 'center'
-        }}
-      >
-        {selectedNodeData}
-      </div>
+      {isLoading && (
+        <div
+          style={{
+            gridRow: '2',
+            gridColumn: 1,
+            backgroundColor: '#e0e0e0dd',
+            zIndex: 10,
+            display: 'grid'
+          }}
+        >
+          <div style={{ justifySelf: 'center', alignSelf: 'end', fontSize: '24px', width: '80px' }}>Loading</div>
+          <div
+            style={{
+              alignSelf: 'start',
+              justifySelf: 'center'
+            }}
+          >
+            <FadeLoader color="#00cbcc" />
+          </div>
+        </div>
+      )}
       {infoPositions && (
         <NodeInfoDiv position={infoPositions}>
-          {selectedNodeData}
+          <div style={{ backgroundColor: '#d0d0d0ce', width: '250px' }}>{selectedNodeData}</div>
           <div style={{ pointerEvents: 'auto', justifySelf: 'center' }}>
             <Button width="100%" onClickFunction={() => {}}>
               Enrich Node
@@ -86,6 +99,10 @@ const Graph = () => {
       )}
     </div>
   );
+};
+
+Graph.propTypes = {
+  isLoading: PropTypes.bool.isRequired
 };
 
 export default Graph;
