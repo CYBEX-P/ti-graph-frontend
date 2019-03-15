@@ -58,7 +58,7 @@ const Graph = ({ isLoading }) => {
         role="presentation"
         style={{
           width: '100%',
-          height: '99vh',
+          height: '100vh',
           gridRow: '1 / span 2',
           gridColumn: 1,
           zIndex: 2,

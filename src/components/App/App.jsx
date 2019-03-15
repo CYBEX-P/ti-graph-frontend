@@ -25,7 +25,7 @@ function UpdateGraph(data) {
   const { edges } = data.Neo4j[1][0];
   const dataObject = { nodes, edges };
 
-  const options = { layout: { improvedLayout: false } };
+  const options = { layout: { improvedLayout: false }, height: '99vh' };
   const container = document.getElementById('mynetwork');
   const network = new Network(container, dataObject, options);
   return network;

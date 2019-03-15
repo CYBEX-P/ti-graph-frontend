@@ -17,6 +17,7 @@ import {
   faServer
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 // import SplashScreen from './components/SplashScreen/SplashScreen';
 
 library.add(
