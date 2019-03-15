@@ -6,8 +6,16 @@ import { StyledButtonChild } from '../__styles__/styles';
 
 const Button = props => {
   const { onClickFunction, children, type, hasIcon, width } = props;
+
   return (
-    <ReactStrapButton color="primary" width={width} type={type} onClick={onClickFunction}>
+    <ReactStrapButton
+      className="d-flex"
+      style={{ width, height: '56px' }}
+      color="primary"
+      type={type}
+      onClick={onClickFunction}
+      block
+    >
       {Array.isArray(children)
         ? children.map((child, index) => (
             // eslint-disable-next-line react/jsx-indent
