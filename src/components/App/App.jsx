@@ -66,13 +66,13 @@ const App = () => {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
       axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
-        if (data['Hostname insert status'] !== 0) {
+        if (data['insert status'] !== 0) {
           axios.get('neo4j/export').then(response => {
             setNeo4jData(response.data);
           });
         } else {
           // Switch this to a modal
-          alert('Hostname lookup returned nothing.');
+          alert(`${enrichmentType} lookup returned nothing.`);
         }
       });
     }
