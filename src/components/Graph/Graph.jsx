@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { FadeLoader } from 'react-spinners';
+import { CircleLoader } from 'react-spinners';
 
 import NetworkContext from '../App/NetworkContext';
 import Button from '../Button/Button';
@@ -58,7 +58,7 @@ const Graph = ({ isLoading }) => {
         role="presentation"
         style={{
           width: '100%',
-          height: '99vh',
+          height: '100vh',
           gridRow: '1 / span 2',
           gridColumn: 1,
           zIndex: 2,
@@ -83,7 +83,7 @@ const Graph = ({ isLoading }) => {
               justifySelf: 'center'
             }}
           >
-            <FadeLoader color="#00cbcc" />
+            <CircleLoader color="#00cbcc" />
           </div>
         </div>
       )}

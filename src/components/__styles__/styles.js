@@ -180,21 +180,6 @@ const ModalContentStyle = styled.div`
   grid-template-columns: auto 36px;
 `;
 
-const StyledButton = styled.button`
-  display: flex;
-  border: none;
-  margin: 0;
-  background: ${primaryBlue};
-  border-radius: 4px;
-  height: 56px;
-  width: ${props => props.width || '80%'};
-  border: 1px solid ${primaryDarkBlue};
-  color: ${secondaryGrey};
-  justify-content: center;
-  align-content: center;
-  box-shadow: 1px 2px 4px 2px #33333355;
-`;
-
 const StyledButtonChild = styled.div`
   ${props => (props.hasIcon && props.index === 0 ? 'flex-grow: 0' : 'flex-grow: 2')}
 `;
@@ -219,7 +204,6 @@ export {
   MenuBarIconStyle,
   ContentContainerStyle,
   ModalContentStyle,
-  StyledButton,
   StyledButtonChild,
   GraphMenuInputStyle
 };
