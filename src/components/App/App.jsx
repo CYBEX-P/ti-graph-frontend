@@ -79,6 +79,17 @@ const App = () => {
     actions.resetForm();
   }
 
+  const [isLoading, setLoading] = useState(false);
+  function handleEnrichAll() {
+    setLoading(true);
+    axios.get('/enrich/all').then(() => {
+      axios.get('/neo4j/export').then(({ data }) => {
+        setNeo4jData(data);
+        setLoading(false);
+      });
+    });
+  }
+
   // Get data on first render
   useEffect(() => {
     axios.get('/neo4j/export').then(({ data }) => {
@@ -99,7 +110,7 @@ const App = () => {
         <NetworkContext.Provider value={{ network, neo4jData }}>
           <AppContainer>
             <ContentContainerStyle>
-              <Graph />
+              <Graph isLoading={isLoading} />
               <GraphModal title="example" contentLabel="Example Modal">
                 <div>Content will go here soon!</div>
               </GraphModal>
@@ -192,12 +203,7 @@ const App = () => {
                     </form>
                   )}
                 />
-                <Button width="100%" 
-                onClickFunction={() => axios.get('/enrich/all').then(() => {
-                          axios.get('/neo4j/export').then(({ data }) => {
-                            setNeo4jData(data);
-                          });
-                  })}>
+                <Button width="100%" onClickFunction={() => handleEnrichAll()}>
                   Enrich All
                 </Button>
               </div>
