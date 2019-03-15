@@ -1,12 +1,13 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledButton, StyledButtonChild } from '../__styles__/styles';
+import { Button as ReactStrapButton } from 'reactstrap';
+import { StyledButtonChild } from '../__styles__/styles';
 
 const Button = props => {
   const { onClickFunction, children, type, hasIcon, width } = props;
   return (
-    <StyledButton width={width} type={type} onClick={onClickFunction}>
+    <ReactStrapButton color="primary" width={width} type={type} onClick={onClickFunction}>
       {Array.isArray(children)
         ? children.map((child, index) => (
             // eslint-disable-next-line react/jsx-indent
@@ -15,7 +16,7 @@ const Button = props => {
             </StyledButtonChild>
           ))
         : children}
-    </StyledButton>
+    </ReactStrapButton>
   );
 };
 

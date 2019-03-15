@@ -4,10 +4,11 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Input } from 'reactstrap';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
-import { AppContainer, ContentContainerStyle, GraphMenuInputStyle } from '../__styles__/styles';
+import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
 import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
@@ -32,6 +33,8 @@ function UpdateGraph(data) {
 }
 
 const App = () => {
+  const [isLoading, setLoading] = useState(false);
+
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
     if (action === 'left' || action === 'right' || action === 'bottom' || action === 'top') {
       return action;
@@ -53,10 +56,17 @@ const App = () => {
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
+      setLoading(true);
       axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
-        axios.get('neo4j/export').then(({ data }) => {
-          setNeo4jData(data);
-        });
+        axios
+          .get('neo4j/export')
+          .then(({ data }) => {
+            setLoading(false);
+            setNeo4jData(data);
+          })
+          .catch(() => {
+            setLoading(false);
+          });
       });
     }
     actions.resetForm();
@@ -67,27 +77,44 @@ const App = () => {
     if (ipToEnrich !== 'none') {
       axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
         if (data['insert status'] !== 0) {
-          axios.get('neo4j/export').then(response => {
-            setNeo4jData(response.data);
-          });
+          setLoading(true);
+          axios
+            .get('neo4j/export')
+            .then(response => {
+              setLoading(false);
+              setNeo4jData(response.data);
+            })
+            .catch(() => {
+              setLoading(false);
+            });
         } else {
           // Switch this to a modal
           alert(`${enrichmentType} lookup returned nothing.`);
+          setLoading(false);
         }
       });
     }
     actions.resetForm();
   }
 
-  const [isLoading, setLoading] = useState(false);
   function handleEnrichAll() {
     setLoading(true);
-    axios.get('/enrich/all').then(() => {
-      axios.get('/neo4j/export').then(({ data }) => {
-        setNeo4jData(data);
+    axios
+      .get('/enrich/all')
+      .then(() => {
+        axios
+          .get('/neo4j/export')
+          .then(({ data }) => {
+            setNeo4jData(data);
+            setLoading(false);
+          })
+          .catch(() => {
+            setLoading(false);
+          });
+      })
+      .catch(() => {
         setLoading(false);
       });
-    });
   }
 
   // Get data on first render
@@ -147,7 +174,7 @@ const App = () => {
                   initialValues={{ ipToInsert: '' }}
                   render={({ handleChange, errors, values, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                      <GraphMenuInputStyle
+                      <Input
                         placeholder="IP Address"
                         name="ipToInsert"
                         value={values.ipToInsert}
