@@ -26,7 +26,17 @@ function UpdateGraph(data) {
   const { edges } = data.Neo4j[1][0];
   const dataObject = { nodes, edges };
 
-  const options = { layout: { improvedLayout: false }, height: '99vh' };
+  const options = {
+    layout: { improvedLayout: true },
+    height: '99vh',
+    nodes: {
+      shape: 'circle',
+      widthConstraint: 100
+    },
+    edges: {
+      length: 200
+    }
+  };
   const container = document.getElementById('mynetwork');
   const network = new Network(container, dataObject, options);
   return network;
