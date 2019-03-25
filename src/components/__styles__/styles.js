@@ -131,7 +131,8 @@ const ExpandedMenuBar = styled.div`
         justify-items: center;
         display: grid;
         height: 100%;
-        width: 700px;
+        width: 100%;
+        max-width: 700px;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         grid-column: 2 / span 3;
