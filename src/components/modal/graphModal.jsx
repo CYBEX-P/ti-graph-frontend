@@ -29,7 +29,7 @@ const ContentStyle = styled.div`
 
 ReactModal.setAppElement('#root');
 
-const GraphModal = ({ contentLabel, children, title }) => {
+const GraphModal = ({ contentLabel, children, title, afterCloseFn }) => {
   const { isShowingModal, dispatchModal } = useContext(ModalContext);
   const { dispatchExpand } = useContext(MenuContext);
   return (
@@ -38,6 +38,7 @@ const GraphModal = ({ contentLabel, children, title }) => {
       onAfterOpen={() => dispatchExpand('none')}
       contentLabel={contentLabel}
       style={{ overlay: { zIndex: 10 } }}
+      onAfterClose={afterCloseFn}
     >
       <ModalContentStyle>
         <TitleStyle>{title}</TitleStyle>
@@ -55,12 +56,14 @@ const GraphModal = ({ contentLabel, children, title }) => {
 GraphModal.propTypes = {
   contentLabel: PropTypes.string,
   children: PropTypes.node,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  afterCloseFn: PropTypes.func
 };
 
 GraphModal.defaultProps = {
   contentLabel: 'Graph Modal',
-  children: <></>
+  children: <></>,
+  afterCloseFn: () => {}
 };
 
 export default GraphModal;

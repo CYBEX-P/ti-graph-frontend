@@ -53,6 +53,8 @@ const App = () => {
 
   const [network, setNetwork] = useState(null);
 
+  const [errorToDisplay, setError] = useState(null);
+
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
@@ -87,16 +89,19 @@ const App = () => {
                 setNeo4jData(response.data);
               })
               .catch(() => {
+                setError(`${enrichmentType} returned nothing!`);
                 dispatchModal('Error');
                 setLoading(false);
               });
           } else {
             // Switch this to a modal
+            setError(`${enrichmentType} lookup returned nothing!`);
             dispatchModal('Error');
             setLoading(false);
           }
         })
         .catch(() => {
+          setError(`${enrichmentType} returned nothing!`);
           dispatchModal('Error');
           setLoading(false);
         });
@@ -168,11 +173,12 @@ const App = () => {
               </Button>
             </div>
           </GraphModal>
-          <GraphModal title="Error" contentLabel="Error">
+          <GraphModal afterCloseFn={() => setError(null)} title="Error" contentLabel="Error">
             <div style={{ textAlign: 'center' }}>
               <FontAwesomeIcon icon="meh" size="10x" />
               <br />
               Oops! An error occured!
+              <div style={{ color: '#ff4300' }}>{errorToDisplay}</div>
             </div>
           </GraphModal>
 
