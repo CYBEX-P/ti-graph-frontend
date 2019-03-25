@@ -10,7 +10,7 @@ const AppContainer = styled.div`
   height: 100vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 36px 300px minmax(100px, auto) 300px 36px;
+  grid-template-columns: 36px minmax(100px, 300px) auto minmax(100px, 300px) 36px;
   grid-template-rows: 56px 200px auto 200px 36px;
 `;
 

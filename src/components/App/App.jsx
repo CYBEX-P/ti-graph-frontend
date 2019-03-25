@@ -75,26 +75,33 @@ const App = () => {
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
     if (ipToEnrich !== 'none') {
-      axios.get(`/enrich/${enrichmentType}/${ipToEnrich}`).then(({ data }) => {
-        if (data['insert status'] !== 0) {
-          setLoading(true);
-          axios
-            .get('neo4j/export')
-            .then(response => {
-              setLoading(false);
-              setNeo4jData(response.data);
-            })
-            .catch(() => {
-              setLoading(false);
-            });
-        } else {
-          // Switch this to a modal
-          alert(`${enrichmentType} lookup returned nothing.`);
+      axios
+        .get(`/enrich/${enrichmentType}/${ipToEnrich}`)
+        .then(({ data }) => {
+          if (data['insert status'] !== 0) {
+            setLoading(true);
+            axios
+              .get('neo4j/export')
+              .then(response => {
+                setLoading(false);
+                setNeo4jData(response.data);
+              })
+              .catch(() => {
+                dispatchModal('Error');
+                setLoading(false);
+              });
+          } else {
+            // Switch this to a modal
+            dispatchModal('Error');
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          dispatchModal('Error');
           setLoading(false);
-        }
-      });
+        });
     }
-    actions.resetForm();
+    actions.setSubmitting(false);
   }
 
   function handleEnrichAll() {
@@ -109,10 +116,12 @@ const App = () => {
             setLoading(false);
           })
           .catch(() => {
+            dispatchModal('Error');
             setLoading(false);
           });
       })
       .catch(() => {
+        dispatchModal('Error');
         setLoading(false);
       });
   }
@@ -135,15 +144,41 @@ const App = () => {
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
         <NetworkContext.Provider value={{ network, neo4jData }}>
+          {/* Keep modals here */}
+          <GraphModal title="example" contentLabel="Example Modal">
+            <div>Content will go here soon!</div>
+          </GraphModal>
+          <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
+            <div>{JSON.stringify(neo4jData)}</div>
+          </GraphModal>
+          <GraphModal title="Database Management" contentLabel="Database Management">
+            <div>
+              <Button
+                width="128px"
+                onClickFunction={() => {
+                  axios.get('/neo4j/wipe').then(() => {
+                    axios.get('/neo4j/export').then(({ data }) => {
+                      setNeo4jData(data);
+                      dispatchModal('none');
+                    });
+                  });
+                }}
+              >
+                Wipe DB
+              </Button>
+            </div>
+          </GraphModal>
+          <GraphModal title="Error" contentLabel="Error">
+            <div style={{ textAlign: 'center' }}>
+              <FontAwesomeIcon icon="meh" size="10x" />
+              <br />
+              Oops! An error occured!
+            </div>
+          </GraphModal>
+
           <AppContainer>
             <ContentContainerStyle>
               <Graph isLoading={isLoading} />
-              <GraphModal title="example" contentLabel="Example Modal">
-                <div>Content will go here soon!</div>
-              </GraphModal>
-              <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
-                <div>{JSON.stringify(neo4jData)}</div>
-              </GraphModal>
             </ContentContainerStyle>
             <NavBar />
             <MenuBar side="left" icon="search">
@@ -249,7 +284,13 @@ const App = () => {
                 }}
               >
                 <div style={{ gridColumn: '1 / span 2' }}>
-                  <Button width="100%" hasIcon onClickFunction={() => {}}>
+                  <Button
+                    width="100%"
+                    hasIcon
+                    onClickFunction={() => {
+                      dispatchModal('Database Management');
+                    }}
+                  >
                     <FontAwesomeIcon size="lg" icon="server" />
                     Database Management
                   </Button>
