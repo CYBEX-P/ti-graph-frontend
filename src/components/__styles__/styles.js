@@ -10,7 +10,7 @@ const AppContainer = styled.div`
   height: 100vh;
   width: 100%;
   display: grid;
-  grid-template-columns: 36px 300px minmax(100px, auto) 300px 36px;
+  grid-template-columns: 36px minmax(100px, 300px) auto minmax(100px, 300px) 36px;
   grid-template-rows: 56px 200px auto 200px 36px;
 `;
 
@@ -131,7 +131,8 @@ const ExpandedMenuBar = styled.div`
         justify-items: center;
         display: grid;
         height: 100%;
-        width: 700px;
+        width: 100%;
+        max-width: 700px;
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         grid-column: 2 / span 3;

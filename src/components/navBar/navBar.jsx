@@ -29,7 +29,7 @@ const NavBar = () => {
             height: '100%',
             backgroundColor: '#0277bd',
             boxShadow: '0px 2px 4px #22222233',
-            zIndex: 6
+            zIndex: 7
           }}
         >
           This is a test
