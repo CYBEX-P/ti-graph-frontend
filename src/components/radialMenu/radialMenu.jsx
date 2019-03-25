@@ -16,7 +16,7 @@ const NodeInfoDiv = styled.div`
   z-index: 2;
   pointer-events: none;
   box-shadow: 1px 1px 4px 2px #11111155;
-  /* overflow: hidden; */
+  overflow: hidden;
 `;
 
 const Child = styled.div`
