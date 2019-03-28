@@ -15,7 +15,8 @@ import {
   faUser,
   faPlusCircle,
   faServer,
-  faMeh
+  faMeh,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,7 +34,8 @@ library.add(
   faUser,
   faPlusCircle,
   faServer,
-  faMeh
+  faMeh,
+  faInfoCircle
 );
 
 ReactDOM.render(<App />, document.getElementById('root'));
