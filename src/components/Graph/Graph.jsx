@@ -67,7 +67,9 @@ const Graph = ({ isLoading }) => {
           </div>
         </div>
       )}
-      {infoPositions && <RadialMenu nodeData={selectedNodeData} position={infoPositions} />}
+      {infoPositions && (
+        <RadialMenu icons={['info-circle', 'edit']} nodeData={selectedNodeData} position={infoPositions} />
+      )}
     </div>
   );
 };

@@ -21,7 +21,60 @@ const Path = styled.path`
   }
 `;
 
-const RadialMenu = ({ position, nodeData }) => {
+const IconDiv = styled.div`
+  position: absolute;
+  top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 32)}px;
+  left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 32)}px;
+  z-index: 4;
+  pointer-events: none;
+  width: ${({ scale }) => Math.round(scale * 64)}px;
+  height: ${({ scale }) => Math.round(scale * 64)}px;
+  color: #0277bd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  :nth-child(2) {
+    top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 64)}px;
+    left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 100)}px;
+  }
+  :nth-child(3) {
+    /* background-color: #11111177; */
+    top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 105)}px;
+    left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 64)}px;
+  }
+  :nth-child(4) {
+    /* background-color: #11111177; */
+    top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 105)}px;
+    left: ${({ position }) => Math.round(position.x)}px;
+  }
+  :nth-child(5) {
+    /* background-color: #11111177; */
+    top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 62)}px;
+    left: ${({ position, scale }) => Math.round(position.x) + Math.round(scale * 35)}px;
+  }
+  :nth-child(6) {
+    /* background-color: #11111177; */
+    top: ${({ position }) => Math.round(position.y)}px;
+    left: ${({ position, scale }) => Math.round(position.x) + Math.round(scale * 35)}px;
+  }
+  :nth-child(7) {
+    /* background-color: #11111177; */
+    top: ${({ position, scale }) => Math.round(position.y) + Math.round(scale * 36)}px;
+    left: ${({ position }) => Math.round(position.x)}px;
+  }
+  :nth-child(8) {
+    /* background-color: #11111177; */
+    top: ${({ position, scale }) => Math.round(position.y) + Math.round(scale * 36)}px;
+    left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 64)}px;
+  }
+  :nth-child(9) {
+    /* background-color: #11111177; */
+    top: ${({ position }) => Math.round(position.y)}px;
+    left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 105)}px;
+  }
+`;
+
+const RadialMenu = ({ position, nodeData, icons }) => {
   const { network } = useContext(NetworkContext);
   const scale = network.getScale();
   const [isShowingInfo, setShowingInfo] = useState(false);
@@ -71,7 +124,6 @@ const RadialMenu = ({ position, nodeData }) => {
           onClick={() => {
             console.log(7);
             setShowingInfo(!isShowingInfo);
-            console.log(nodeData);
           }}
         />
         <Path
@@ -80,6 +132,12 @@ const RadialMenu = ({ position, nodeData }) => {
           onClick={() => console.log(8)}
         />
       </MenuSVG>
+      {icons.lengh !== 0 &&
+        icons.map(icon => (
+          <IconDiv position={position} scale={scale} key={icon}>
+            <FontAwesomeIcon size={`${scale < 1.2 ? 'sm' : '2x'}`} fixedWidth icon={icon} />
+          </IconDiv>
+        ))}
       {isShowingInfo && (
         <div
           style={{
@@ -100,7 +158,8 @@ const RadialMenu = ({ position, nodeData }) => {
 
 RadialMenu.propTypes = {
   position: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }).isRequired,
-  nodeData: PropTypes.string.isRequired
+  nodeData: PropTypes.string.isRequired,
+  icons: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default RadialMenu;
