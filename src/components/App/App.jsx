@@ -32,7 +32,7 @@ function UpdateGraph(data) {
   return network;
 }
 
-const App = () => {
+const App = (props) => {
   const [isLoading, setLoading] = useState(false);
 
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
@@ -54,6 +54,8 @@ const App = () => {
   const [network, setNetwork] = useState(null);
 
   const [errorToDisplay, setError] = useState(null);
+
+  const [selectedIOC, setSelectedIOC] = useState("SrcIP");
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
@@ -196,6 +198,7 @@ const App = () => {
               >
                 Press to make a modal appear
               </button>
+              
             </MenuBar>
             <MenuBar side="right" icon="edit">
               <div
@@ -215,6 +218,22 @@ const App = () => {
                   initialValues={{ ipToInsert: '' }}
                   render={({ handleChange, errors, values, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
+                      <select
+                        style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
+                        name="IOCType"
+                        value={values.IOCType}
+                        onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType)}}
+                      >
+
+                        {
+                          props.config.types.map(item => 
+                            <option value={item} label={item} key={item}>
+                              {item}
+                            </option>
+                            ) 
+                        }
+
+                      </select>
                       <Input
                         placeholder="IP Address"
                         name="ipToInsert"
@@ -240,10 +259,19 @@ const App = () => {
                         value={values.enrichmentType}
                         onChange={handleChange}
                       >
-                        <option value="asn">asn</option>
+                        {/*<option value="asn">asn</option>
                         <option value="gip">gip</option>
                         <option value="hostname">hostname</option>
-                        <option value="whois">whois</option>
+                        <option value="whois">whois</option>*/}
+
+                        { // SrcIP below needs to be dynamically inserted, could be port, URL, hash etc
+                          props.config.enrichments.SrcIP.map(item => 
+                            <option value={item} label={item} key={item}>
+                              {item}
+                            </option>
+                            )
+                        }
+
                       </select>
                       <select
                         style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}

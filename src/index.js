@@ -19,6 +19,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import App from './components/App/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 library.add(
   faChartBar,
@@ -36,4 +37,10 @@ library.add(
   faMeh
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let YAMLConfig = {}; 
+
+axios.get(`/admin/config`).then(({data}) => {
+  YAMLConfig = data;
+  ReactDOM.render(<App config={YAMLConfig}/>, document.getElementById('root'));
+});
+
