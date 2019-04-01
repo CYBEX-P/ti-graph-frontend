@@ -32,6 +32,11 @@ ReactModal.setAppElement('#root');
 const GraphModal = ({ contentLabel, children, title, afterCloseFn }) => {
   const { isShowingModal, dispatchModal } = useContext(ModalContext);
   const { dispatchExpand } = useContext(MenuContext);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      dispatchModal('none');
+    }
+  });
   return (
     <ReactModal
       isOpen={isShowingModal === title}
