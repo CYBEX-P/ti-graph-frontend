@@ -32,7 +32,7 @@ function UpdateGraph(data) {
   return network;
 }
 
-const App = (props) => {
+const App = props => {
   const [isLoading, setLoading] = useState(false);
 
   const [isExpanded, dispatchExpand] = useReducer((_, action) => {
@@ -55,7 +55,7 @@ const App = (props) => {
 
   const [errorToDisplay, setError] = useState(null);
 
-  const [selectedIOC, setSelectedIOC] = useState("SrcIP");
+  const [selectedIOC, setSelectedIOC] = useState('SrcIP');
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
@@ -198,7 +198,6 @@ const App = (props) => {
               >
                 Press to make a modal appear
               </button>
-              
             </MenuBar>
             <MenuBar side="right" icon="edit">
               <div
@@ -215,25 +214,23 @@ const App = (props) => {
                 <Formik
                   onSubmit={handleInsertIP}
                   validationSchema={InsertIPSchema}
-                  initialValues={{ ipToInsert: '', IOCType: "SrcIP" }}
+                  initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
                   render={({ handleChange, errors, values, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                       <select
                         style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
                         name="IOCType"
                         value={values.IOCType}
-                        //onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType);}}
-                        onChange = {(e) => {(async () => await handleChange(e).then(() => setSelectedIOC(values.IOCType)))()}}
+                        // onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType);}}
+                        onChange={e => {
+                          (async () => await handleChange(e).then(() => setSelectedIOC(values.IOCType)))();
+                        }}
                       >
-
-                        {
-                          props.config.types.map(item => 
-                            <option value={item} label={item} key={item}>
-                              {item}
-                            </option>
-                            ) 
-                        }
-
+                        {props.config.types.map(item => (
+                          <option value={item} label={item} key={item}>
+                            {item}
+                          </option>
+                        ))}
                       </select>
                       <Input
                         placeholder="IP Address"
@@ -260,21 +257,16 @@ const App = (props) => {
                         value={values.enrichmentType}
                         onChange={handleChange}
                       >
-                        {/*<option value="asn">asn</option>
+                        {/* <option value="asn">asn</option>
                         <option value="gip">gip</option>
                         <option value="hostname">hostname</option>
-                        <option value="whois">whois</option>*/}
+                        <option value="whois">whois</option> */}
 
-                        {
-                          props.config.enrichments[selectedIOC].map(item => 
-                            <option value={item} label={item} key={item}>
-                              {item}
-                            </option>
-                            )
-                            
-                        }
-                        
-
+                        {props.config.enrichments[selectedIOC].map(item => (
+                          <option value={item} label={item} key={item}>
+                            {item}
+                          </option>
+                        ))}
                       </select>
                       <select
                         style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
