@@ -215,14 +215,15 @@ const App = (props) => {
                 <Formik
                   onSubmit={handleInsertIP}
                   validationSchema={InsertIPSchema}
-                  initialValues={{ ipToInsert: '' }}
+                  initialValues={{ ipToInsert: '', IOCType: "SrcIP" }}
                   render={({ handleChange, errors, values, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                       <select
                         style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
                         name="IOCType"
                         value={values.IOCType}
-                        onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType)}}
+                        //onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType);}}
+                        onChange = {(e) => {(async () => await handleChange(e).then(() => setSelectedIOC(values.IOCType)))()}}
                       >
 
                         {
@@ -264,13 +265,15 @@ const App = (props) => {
                         <option value="hostname">hostname</option>
                         <option value="whois">whois</option>*/}
 
-                        { // SrcIP below needs to be dynamically inserted, could be port, URL, hash etc
-                          props.config.enrichments.SrcIP.map(item => 
+                        {
+                          props.config.enrichments[selectedIOC].map(item => 
                             <option value={item} label={item} key={item}>
                               {item}
                             </option>
                             )
+                            
                         }
+                        
 
                       </select>
                       <select
