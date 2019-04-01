@@ -38,37 +38,30 @@ const IconDiv = styled.div`
     left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 100)}px;
   }
   :nth-child(3) {
-    /* background-color: #11111177; */
     top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 105)}px;
     left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 64)}px;
   }
   :nth-child(4) {
-    /* background-color: #11111177; */
     top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 105)}px;
     left: ${({ position }) => Math.round(position.x)}px;
   }
   :nth-child(5) {
-    /* background-color: #11111177; */
     top: ${({ position, scale }) => Math.round(position.y) - Math.round(scale * 62)}px;
     left: ${({ position, scale }) => Math.round(position.x) + Math.round(scale * 35)}px;
   }
   :nth-child(6) {
-    /* background-color: #11111177; */
     top: ${({ position }) => Math.round(position.y)}px;
     left: ${({ position, scale }) => Math.round(position.x) + Math.round(scale * 35)}px;
   }
   :nth-child(7) {
-    /* background-color: #11111177; */
     top: ${({ position, scale }) => Math.round(position.y) + Math.round(scale * 36)}px;
     left: ${({ position }) => Math.round(position.x)}px;
   }
   :nth-child(8) {
-    /* background-color: #11111177; */
     top: ${({ position, scale }) => Math.round(position.y) + Math.round(scale * 36)}px;
     left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 64)}px;
   }
   :nth-child(9) {
-    /* background-color: #11111177; */
     top: ${({ position }) => Math.round(position.y)}px;
     left: ${({ position, scale }) => Math.round(position.x) - Math.round(scale * 105)}px;
   }
@@ -144,7 +137,7 @@ const RadialMenu = ({ position, nodeData, icons }) => {
             position: 'absolute',
             top: `${position.y}px`,
             left: `${position.x}px`,
-            zIndex: 200,
+            zIndex: 6,
             backgroundColor: '#111111',
             color: '#e0e0e0'
           }}
