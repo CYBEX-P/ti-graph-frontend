@@ -15,11 +15,7 @@ import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
 import NetworkContext from './NetworkContext';
 import Button from '../Button/Button';
-
-const InsertIPSchema = Yup.object().shape({
-  // IP Validation very rough
-  ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
-});
+import InsertForm from '../forms/InsertForm/InsertForm';
 
 function UpdateGraph(data) {
   const { nodes } = data.Neo4j[0][0];
@@ -56,25 +52,6 @@ const App = props => {
   const [errorToDisplay, setError] = useState(null);
 
   const [selectedIOC, setSelectedIOC] = useState('SrcIP');
-
-  function handleInsertIP(values, actions) {
-    const { ipToInsert } = values;
-    if (ipToInsert !== '') {
-      setLoading(true);
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
-        axios
-          .get('neo4j/export')
-          .then(({ data }) => {
-            setLoading(false);
-            setNeo4jData(data);
-          })
-          .catch(() => {
-            setLoading(false);
-          });
-      });
-    }
-    actions.resetForm();
-  }
 
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;
@@ -150,7 +127,7 @@ const App = props => {
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
-        <NetworkContext.Provider value={{ network, neo4jData }}>
+        <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>
           {/* Keep modals here */}
           <GraphModal title="example" contentLabel="Example Modal">
             <div>Content will go here soon!</div>
@@ -211,41 +188,7 @@ const App = props => {
                   gridTemplateColumns: '80%'
                 }}
               >
-                <Formik
-                  onSubmit={handleInsertIP}
-                  validationSchema={InsertIPSchema}
-                  initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
-                  render={({ handleChange, errors, values, handleSubmit }) => (
-                    <form onSubmit={handleSubmit}>
-                      <select
-                        style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
-                        name="IOCType"
-                        value={values.IOCType}
-                        // onChange={(e) => {handleChange(e); setSelectedIOC(values.IOCType);}}
-                        onChange={e => {
-                          (async () => await handleChange(e).then(() => setSelectedIOC(values.IOCType)))();
-                        }}
-                      >
-                        {props.config.types.map(item => (
-                          <option value={item} label={item} key={item}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                      <Input
-                        placeholder="IP Address"
-                        name="ipToInsert"
-                        value={values.ipToInsert}
-                        onChange={handleChange}
-                      />
-                      <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
-                        <FontAwesomeIcon size="lg" icon="plus-circle" />
-                        <div>Insert IP</div>
-                      </Button>
-                      <div style={{ color: '#ff4500' }}>{errors.ipToInsert}</div>
-                    </form>
-                  )}
-                />
+                <InsertForm config={props.config} />
                 <Formik
                   onSubmit={handleEnrichIP}
                   initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
