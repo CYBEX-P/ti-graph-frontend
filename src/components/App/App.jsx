@@ -1,10 +1,8 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
 import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Input } from 'reactstrap';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
@@ -51,7 +49,7 @@ const App = props => {
 
   const [errorToDisplay, setError] = useState(null);
 
-  const [selectedIOC, setSelectedIOC] = useState('SrcIP');
+  const [selectedIOC] = useState('SrcIP');
 
   function handleEnrichIP(values, actions) {
     const { enrichmentType, ipToEnrich } = values;

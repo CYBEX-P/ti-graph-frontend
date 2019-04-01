@@ -14,6 +14,7 @@ const InsertIPSchema = Yup.object().shape({
 
 const InsertForm = props => {
   const { setNeo4jData } = useContext(NetworkContext);
+
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
@@ -28,6 +29,7 @@ const InsertForm = props => {
     }
     actions.resetForm();
   }
+
   return (
     <Formik
       onSubmit={handleInsertIP}
@@ -49,6 +51,7 @@ const InsertForm = props => {
               </option>
             ))}
           </select>
+          {}
           <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
           <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
             <FontAwesomeIcon size="lg" icon="plus-circle" />
