@@ -10,6 +10,7 @@ const Graph = ({ isLoading }) => {
   const [selection, setSelection] = useState({ nodes: [], edges: [] });
   const [infoPositions, setInfoPositions] = useState(null);
   const [selectedNodeData, setSelectedNodeData] = useState(null);
+  const [isShowingNodeData, setShowingNodeData] = useState(false);
   useEffect(() => {
     if (selection.nodes.length !== 0) {
       // Returns the id of the current node selected, not the index
@@ -68,7 +69,35 @@ const Graph = ({ isLoading }) => {
         </div>
       )}
       {infoPositions && (
-        <RadialMenu icons={['info-circle', 'edit']} nodeData={selectedNodeData} position={infoPositions} />
+        <RadialMenu
+          icons={['info-circle', 'edit']}
+          position={infoPositions}
+          onClickFunctions={[
+            () => setShowingNodeData(!isShowingNodeData),
+            () => console.log(2),
+            () => console.log(3),
+            () => console.log(4),
+            () => console.log(5),
+            () => console.log(6),
+            () => console.log(7),
+            () => console.log(8)
+          ]}
+        />
+      )}
+      {isShowingNodeData && infoPositions && (
+        <div
+          style={{
+            position: 'absolute',
+            left: `${infoPositions.x}px`,
+            top: `${infoPositions.y}px`,
+            zIndex: 5,
+            backgroundColor: '#111',
+            color: '#fff',
+            pointerEvents: 'none'
+          }}
+        >
+          {selectedNodeData}
+        </div>
       )}
     </div>
   );
