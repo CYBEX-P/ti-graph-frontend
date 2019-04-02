@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { Input } from 'reactstrap';
 import axios from 'axios';
@@ -6,6 +6,8 @@ import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
 import NetworkContext from '../../App/NetworkContext';
+import ModalContext from '../../App/ModalContext';
+import MenuContext from '../../App/MenuContext';
 
 const InsertIPSchema = Yup.object().shape({
   // IP Validation very rough
@@ -13,7 +15,11 @@ const InsertIPSchema = Yup.object().shape({
 });
 
 const InsertForm = props => {
-  const { setNeo4jData } = useContext(NetworkContext);
+  const { neo4jData, setNeo4jData } = useContext(NetworkContext);
+  const { dispatchModal, setError } = useContext(ModalContext);
+  const { setLoading } = useContext(MenuContext);
+
+  const [selectedIOC, setSelectedIOC] = useState('SrcIP');
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
@@ -30,37 +36,116 @@ const InsertForm = props => {
     actions.resetForm();
   }
 
+  function handleEnrichIP(values, actions) {
+    const { enrichmentType, ipToEnrich } = values;
+    if (ipToEnrich !== 'none') {
+      setLoading(true);
+      axios
+        .get(`/enrich/${enrichmentType}/${ipToEnrich}`)
+        .then(({ data }) => {
+          if (data['insert status'] !== 0) {
+            axios
+              .get('neo4j/export')
+              .then(response => {
+                setNeo4jData(response.data);
+              })
+              .catch(() => {
+                setError(`${enrichmentType} returned nothing!`);
+                dispatchModal('Error');
+                setLoading(false);
+              });
+          } else {
+            setError(`${enrichmentType} lookup returned nothing!`);
+            dispatchModal('Error');
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          setError(`${enrichmentType} returned nothing!`);
+          dispatchModal('Error');
+          setLoading(false);
+        });
+    }
+    actions.setSubmitting(false);
+  }
+
   return (
-    <Formik
-      onSubmit={handleInsertIP}
-      validationSchema={InsertIPSchema}
-      initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
-      render={({ handleChange, errors, values, handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <select
-            style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
-            name="IOCType"
-            value={values.IOCType}
-            onChange={e => {
-              handleChange(e);
-            }}
-          >
-            {props.config.types.map(item => (
-              <option value={item} label={item} key={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-          {}
-          <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
-          <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
-            <FontAwesomeIcon size="lg" icon="plus-circle" />
-            <div>Insert IP</div>
-          </Button>
-          <div style={{ color: '#ff4500' }}>{errors.ipToInsert}</div>
-        </form>
-      )}
-    />
+    <>
+      <Formik
+        onSubmit={handleInsertIP}
+        validationSchema={InsertIPSchema}
+        initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
+        render={({ handleChange, errors, values, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <select
+              style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
+              name="IOCType"
+              value={values.IOCType}
+              onChange={e => {
+                handleChange(e);
+                setSelectedIOC(e.target.value);
+              }}
+            >
+              {props.config.types.map(item => (
+                <option value={item} label={item} key={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <div>{props.ioc}</div>
+            <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+            <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
+              <FontAwesomeIcon size="lg" icon="plus-circle" />
+              <div>Insert IP</div>
+            </Button>
+            <div style={{ color: '#ff4500' }}>{errors.ipToInsert}</div>
+          </form>
+        )}
+      />
+      <Formik
+        onSubmit={handleEnrichIP}
+        initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
+        render={({ values, handleChange, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <select
+              style={{ width: '30%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
+              name="enrichmentType"
+              value={values.enrichmentType}
+              onChange={handleChange}
+            >
+              {props.config.enrichments[selectedIOC].map(item => (
+                <option value={item} label={item} key={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+            <select
+              style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
+              name="ipToEnrich"
+              value={values.ipToEnrich}
+              onChange={handleChange}
+            >
+              <option value="none">None</option>
+              {neo4jData &&
+                neo4jData.Neo4j[0].map(({ nodes }) =>
+                  nodes.map(({ properties, id }) => {
+                    return (
+                      properties.IP && (
+                        <option key={id} value={properties.IP} label={properties.IP}>
+                          {properties.IP}
+                        </option>
+                      )
+                    );
+                  })
+                )}
+            </select>
+            <Button width="100%" type="submit" onClickFunction={() => {}}>
+              Enrich IP
+            </Button>
+          </form>
+        )}
+      />
+    </>
   );
 };
 

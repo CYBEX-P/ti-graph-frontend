@@ -1,6 +1,5 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Formik } from 'formik';
 import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -49,43 +48,6 @@ const App = props => {
 
   const [errorToDisplay, setError] = useState(null);
 
-  const [selectedIOC] = useState('SrcIP');
-
-  function handleEnrichIP(values, actions) {
-    const { enrichmentType, ipToEnrich } = values;
-    if (ipToEnrich !== 'none') {
-      axios
-        .get(`/enrich/${enrichmentType}/${ipToEnrich}`)
-        .then(({ data }) => {
-          if (data['insert status'] !== 0) {
-            setLoading(true);
-            axios
-              .get('neo4j/export')
-              .then(response => {
-                setLoading(false);
-                setNeo4jData(response.data);
-              })
-              .catch(() => {
-                setError(`${enrichmentType} returned nothing!`);
-                dispatchModal('Error');
-                setLoading(false);
-              });
-          } else {
-            // Switch this to a modal
-            setError(`${enrichmentType} lookup returned nothing!`);
-            dispatchModal('Error');
-            setLoading(false);
-          }
-        })
-        .catch(() => {
-          setError(`${enrichmentType} returned nothing!`);
-          dispatchModal('Error');
-          setLoading(false);
-        });
-    }
-    actions.setSubmitting(false);
-  }
-
   function handleEnrichAll() {
     setLoading(true);
     axios
@@ -123,8 +85,8 @@ const App = props => {
   }, [neo4jData]);
 
   return (
-    <MenuContext.Provider value={{ isExpanded, dispatchExpand }}>
-      <ModalContext.Provider value={{ isShowingModal, dispatchModal }}>
+    <MenuContext.Provider value={{ isExpanded, dispatchExpand, setLoading }}>
+      <ModalContext.Provider value={{ isShowingModal, dispatchModal, setError }}>
         <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>
           {/* Keep modals here */}
           <GraphModal title="example" contentLabel="Example Modal">
@@ -187,54 +149,6 @@ const App = props => {
                 }}
               >
                 <InsertForm config={props.config} />
-                <Formik
-                  onSubmit={handleEnrichIP}
-                  initialValues={{ ipToEnrich: 'none', enrichmentType: 'asn' }}
-                  render={({ values, handleChange, handleSubmit }) => (
-                    <form onSubmit={handleSubmit}>
-                      <select
-                        style={{ width: '30%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
-                        name="enrichmentType"
-                        value={values.enrichmentType}
-                        onChange={handleChange}
-                      >
-                        {/* <option value="asn">asn</option>
-                        <option value="gip">gip</option>
-                        <option value="hostname">hostname</option>
-                        <option value="whois">whois</option> */}
-
-                        {props.config.enrichments[selectedIOC].map(item => (
-                          <option value={item} label={item} key={item}>
-                            {item}
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
-                        name="ipToEnrich"
-                        value={values.ipToEnrich}
-                        onChange={handleChange}
-                      >
-                        <option value="none">None</option>
-                        {neo4jData &&
-                          neo4jData.Neo4j[0].map(({ nodes }) =>
-                            nodes.map(({ properties, id }) => {
-                              return (
-                                properties.IP && (
-                                  <option key={id} value={properties.IP} label={properties.IP}>
-                                    {properties.IP}
-                                  </option>
-                                )
-                              );
-                            })
-                          )}
-                      </select>
-                      <Button width="100%" type="submit" onClickFunction={() => {}}>
-                        Enrich IP
-                      </Button>
-                    </form>
-                  )}
-                />
                 <Button width="100%" onClickFunction={() => handleEnrichAll()}>
                   Enrich All
                 </Button>
