@@ -15,9 +15,9 @@ const MenuSVG = styled.svg`
 `;
 
 const Path = styled.path`
-  fill: #aaa;
+  fill: ${props => (props.isActive ? '#aaa' : '#666')};
   :hover {
-    fill: #e0e0e0;
+    ${props => (props.isActive ? 'fill: #e0e0e0' : '')};
   }
 `;
 
@@ -73,6 +73,7 @@ const RadialMenu = ({ position, icons, onClickFunctions }) => {
   while (onClickFunctions.lengh < 8) {
     onClickFunctions.push(() => {});
   }
+  console.log(icons.length);
   return (
     <div>
       <MenuSVG
@@ -87,16 +88,19 @@ const RadialMenu = ({ position, icons, onClickFunctions }) => {
           d="M.76,99.5h49a50.13,50.13,0,0,1,14.57-35L29.71,29.92A98.62,98.62,0,0,0,.76,99.5Z"
           transform="translate(-0.76 -0.5)"
           onClick={onClickFunctions[0]}
+          isActive={icons.length >= 1}
         />
         <Path
           d="M30.42,29.21,65,63.83A50.63,50.63,0,0,1,99.5,49.51V.51A100,100,0,0,0,30.42,29.21Z"
           transform="translate(-0.76 -0.5)"
           onClick={onClickFunctions[1]}
+          isActive={icons.length >= 2}
         />
         <Path
           d="M135.45,63.84,170.09,29.2A99.19,99.19,0,0,0,100.5.5v49A50.29,50.29,0,0,1,135.45,63.84Z"
           transform="translate(-0.76 -0.5)"
           onClick={onClickFunctions[2]}
+          isActive={icons.length >= 3}
         />
         <Path
           d="M170.8,29.91,136.17,64.54a50.37,50.37,0,0,1,14.57,35h49A99.17,99.17,0,0,0,170.8,29.91Z"
