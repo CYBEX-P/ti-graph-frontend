@@ -48,6 +48,7 @@ const InsertForm = props => {
               .get('neo4j/export')
               .then(response => {
                 setNeo4jData(response.data);
+                setLoading(false);
               })
               .catch(() => {
                 setError(`${enrichmentType} returned nothing!`);
@@ -92,7 +93,7 @@ const InsertForm = props => {
                 </option>
               ))}
             </select>
-            <div>{props.ioc}</div>
+            
             <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />
