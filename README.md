@@ -18,3 +18,4 @@ $ npm run build
 ```
 
 Then follow the steps specified in [the server documentation](https://github.com/CYBEX-P/ti-graph/blob/master/README.md)
+:)
