@@ -19,7 +19,7 @@ const Graph = ({ isLoading }) => {
       const domPositions = network.canvasToDOM(canvasPositions);
       // Find the nodes in Neo4jData where the selected node === id
       // There should only be one node returned -- might behave weird otherwise
-      const matchingNeo4jData = neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === selectedNode)[0];
+      const [matchingNeo4jData] = neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === selectedNode);
 
       const { properties } = matchingNeo4jData;
       if (infoPositions !== null && domPositions.x === infoPositions.x && domPositions.y === infoPositions.y) {
@@ -72,16 +72,7 @@ const Graph = ({ isLoading }) => {
         <RadialMenu
           icons={['info-circle', 'edit']}
           position={infoPositions}
-          onClickFunctions={[
-            () => setShowingNodeData(!isShowingNodeData),
-            () => console.log(2),
-            () => console.log(3),
-            () => console.log(4),
-            () => console.log(5),
-            () => console.log(6),
-            () => console.log(7),
-            () => console.log(8)
-          ]}
+          onClickFunctions={[() => setShowingNodeData(!isShowingNodeData)]}
         />
       )}
       {isShowingNodeData && infoPositions && (
