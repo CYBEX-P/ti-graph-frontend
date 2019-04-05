@@ -84,11 +84,16 @@ const App = props => {
     const container = document.getElementById('mynetwork');
     const nw = new Network(container, dataObject, options);
     nw.on('hoverNode', e => {
-      setHoverText({
-        text: JSON.stringify(neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === e.node)[0].properties),
-        x: e.event.clientX,
-        y: e.event.clientY
-      });
+      if (typeof neo4jData.Neo4j !== 'undefined') {
+        return setHoverText({
+          text: JSON.stringify(
+            neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === e.node)[0].properties
+          ),
+          x: e.event.clientX,
+          y: e.event.clientY
+        });
+      }
+      return setHoverText(null);
     });
     nw.on('blurNode', () => setHoverText(null));
     return nw;
