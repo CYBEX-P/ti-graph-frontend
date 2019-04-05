@@ -14,27 +14,6 @@ import NetworkContext from './NetworkContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 
-function UpdateGraph(data) {
-  const { nodes } = data.Neo4j[0][0];
-  const { edges } = data.Neo4j[1][0];
-  const dataObject = { nodes, edges };
-
-  const options = {
-    layout: { improvedLayout: true },
-    height: '99vh',
-    nodes: {
-      shape: 'circle',
-      widthConstraint: 100
-    },
-    edges: {
-      length: 200
-    }
-  };
-  const container = document.getElementById('mynetwork');
-  const network = new Network(container, dataObject, options);
-  return network;
-}
-
 const App = props => {
   const [isLoading, setLoading] = useState(false);
 
@@ -58,6 +37,8 @@ const App = props => {
 
   const [errorToDisplay, setError] = useState(null);
 
+  const [hoverText, setHoverText] = useState(null);
+
   function handleEnrichAll() {
     setLoading(true);
     axios
@@ -78,6 +59,39 @@ const App = props => {
         dispatchModal('Error');
         setLoading(false);
       });
+  }
+
+  function UpdateGraph(data) {
+    const { nodes } = data.Neo4j[0][0];
+    const { edges } = data.Neo4j[1][0];
+    const dataObject = { nodes, edges };
+
+    const options = {
+      layout: { improvedLayout: true },
+      height: '99vh',
+      nodes: {
+        shape: 'circle',
+        widthConstraint: 100
+      },
+      edges: {
+        length: 200
+      },
+      interaction: {
+        hover: true,
+        hoverConnectedEdges: false
+      }
+    };
+    const container = document.getElementById('mynetwork');
+    const nw = new Network(container, dataObject, options);
+    nw.on('hoverNode', e => {
+      setHoverText({
+        text: JSON.stringify(neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === e.node)[0].properties),
+        x: e.event.clientX,
+        y: e.event.clientY
+      });
+    });
+    nw.on('blurNode', () => setHoverText(null));
+    return nw;
   }
 
   // Get data on first render
@@ -211,6 +225,20 @@ const App = props => {
                 </div>
               </div>
             </MenuBar>
+            {hoverText && (
+              <div
+                style={{
+                  position: 'absolute',
+                  zIndex: 1000,
+                  top: hoverText.y,
+                  left: hoverText.x,
+                  backgroundColor: '#111',
+                  color: '#fff'
+                }}
+              >
+                {hoverText.text}
+              </div>
+            )}
           </AppContainer>
         </NetworkContext.Provider>
       </ModalContext.Provider>
