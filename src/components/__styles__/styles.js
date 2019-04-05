@@ -88,6 +88,9 @@ const MenuBarStyle = styled(UnstyledButton)`
     }
     return ``;
   }};
+  :hover {
+    background-color: #5897f0;
+  }
 `;
 
 const ExpandedMenuBar = styled.div`

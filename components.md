@@ -2,7 +2,7 @@
 
 |             | MenuBars | User Creation Modal | DB Mgmt Modal | Custom Buttons | visjs Network |
 | ----------- | -------- | ------------------- | ------------- | -------------- | ------------- |
-| Implemented | x        |                     |               | x              | x             |
+| Implemented | x        |                     | -             | x              | x             |
 | Styled      | x        |                     |               | x              | x             |
 
 |             | Splash Screen | Loading Overlay | Radial Menu | Event Management Modal |
@@ -12,8 +12,8 @@
 
 |             | User Mgmt Modal | Event Creation Modal | Event Context | Admin Container Management Modal |
 | ----------- | --------------- | -------------------- | ------------- | -------------------------------- |
-| Implemented |
-| Styled      |
+| Implemented |                 |                      |               |                                  |
+| Styled      |                 |                      |               |                                  |
 
 |             | Predefined Analysis Button | Custom Network Node (color, shape, edge color) |
 | ----------- | -------------------------- | ---------------------------------------------- |

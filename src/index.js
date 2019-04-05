@@ -15,8 +15,10 @@ import {
   faUser,
   faPlusCircle,
   faServer,
-  faMeh
+  faMeh,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import App from './components/App/App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -33,7 +35,13 @@ library.add(
   faUser,
   faPlusCircle,
   faServer,
-  faMeh
+  faMeh,
+  faInfoCircle
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let YAMLConfig = {};
+
+axios.get(`/admin/config`).then(({ data }) => {
+  YAMLConfig = data;
+  ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));
+});
