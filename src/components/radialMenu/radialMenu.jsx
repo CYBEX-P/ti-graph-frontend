@@ -66,7 +66,7 @@ const IconDiv = styled.div`
   }
 `;
 
-const RadialMenu = ({ position, icons, onClickFunctions, network, scale }) => {
+const RadialMenu = ({ position, icons, onClickFunctions, scale }) => {
   const [onClickFunctionsState] = useState(() => {
     const arrayToReturn = onClickFunctions;
     while (arrayToReturn.length < 8) {
@@ -146,7 +146,8 @@ const RadialMenu = ({ position, icons, onClickFunctions, network, scale }) => {
 RadialMenu.propTypes = {
   position: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }).isRequired,
   icons: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onClickFunctions: PropTypes.arrayOf(PropTypes.func).isRequired
+  onClickFunctions: PropTypes.arrayOf(PropTypes.func).isRequired,
+  scale: PropTypes.number.isRequired
 };
 
 export default RadialMenu;
