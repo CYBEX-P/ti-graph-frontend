@@ -83,7 +83,7 @@ const Graph = ({ isLoading }) => {
     nw.on('dragStart', () => {
       setRadialPosition(null);
     });
-    nw.on('dragEnd', () => {
+    nw.on('stabilized', () => {
       if (selection !== null) {
         setSelection(null);
         nw.unselectAll();
