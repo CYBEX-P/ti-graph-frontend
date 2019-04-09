@@ -6,15 +6,48 @@ import { CircleLoader } from 'react-spinners';
 import NetworkContext from '../App/NetworkContext';
 import RadialMenu from '../radialMenu/radialMenu';
 
+function InitializeGraph(data) {
+  if (typeof data.Neo4j === 'undefined') {
+    return null;
+  }
+  const { nodes } = data.Neo4j[0][0];
+  const { edges } = data.Neo4j[1][0];
+  const dataObject = { nodes, edges };
+
+  const options = {
+    layout: { improvedLayout: true },
+    height: '99vh',
+    nodes: {
+      shape: 'circle',
+      widthConstraint: 100
+    },
+    edges: {
+      length: 200
+    },
+    interaction: {
+      hover: true,
+      hoverConnectedEdges: false
+    }
+  };
+  const container = document.getElementById('mynetwork');
+  const nw = new Network(container, dataObject, options);
+  return nw;
+}
+
 const Graph = ({ isLoading }) => {
   const { neo4jData } = useContext(NetworkContext);
   const [hoverText, setHoverText] = useState(null);
   const [selection, setSelection] = useState({ nodes: [], edges: [] });
   const [radialPosition, setRadialPosition] = useState(null);
+  const [eventListenersAdded, setEventListenersAdded] = useState(false);
+
   const [network, setNetwork] = useState(null);
 
   function UpdatePositions() {
     if (network === null) {
+      return setRadialPosition(null);
+    }
+    if (typeof selection.nodes[0] === 'undefined') {
       return setRadialPosition(null);
     }
     // Returns the id of the current node selected, not the index
@@ -24,31 +57,13 @@ const Graph = ({ isLoading }) => {
     return setRadialPosition(domPositions);
   }
 
-  function UpdateGraph(data) {
+  function AddEventListenersToNetwork(nw, data) {
     if (typeof data.Neo4j === 'undefined') {
-      return null;
+      return false;
     }
-    const { nodes } = data.Neo4j[0][0];
-    const { edges } = data.Neo4j[1][0];
-    const dataObject = { nodes, edges };
-
-    const options = {
-      layout: { improvedLayout: true },
-      height: '99vh',
-      nodes: {
-        shape: 'circle',
-        widthConstraint: 100
-      },
-      edges: {
-        length: 200
-      },
-      interaction: {
-        hover: true,
-        hoverConnectedEdges: false
-      }
-    };
-    const container = document.getElementById('mynetwork');
-    const nw = new Network(container, dataObject, options);
+    if (nw === null) {
+      return false;
+    }
     nw.on('hoverNode', e => {
       if (typeof data.Neo4j !== 'undefined') {
         return setHoverText({
@@ -67,22 +82,36 @@ const Graph = ({ isLoading }) => {
     });
     nw.on('dragStart', () => {
       setRadialPosition(null);
-      nw.unselectAll();
-      setSelection(null);
+    });
+    nw.on('dragEnd', () => {
+      if (selection !== null) {
+        setSelection(null);
+        nw.unselectAll();
+      }
     });
     nw.on('zoom', () => {
       setRadialPosition(null);
-      setSelection(null);
-      nw.unselectAll();
+      if (selection !== null) {
+        nw.unselectAll();
+        setSelection(null);
+      }
     });
-    return nw;
+    return true;
   }
 
   useEffect(() => {
     if (typeof neo4jData.Neo4j !== 'undefined') {
-      setNetwork(UpdateGraph(neo4jData));
+      setNetwork(InitializeGraph(neo4jData));
+      setEventListenersAdded(false);
+      setRadialPosition(null);
     }
   }, [neo4jData]);
+
+  useEffect(() => {
+    if (eventListenersAdded === false) {
+      setEventListenersAdded(AddEventListenersToNetwork(network, neo4jData));
+    }
+  }, [network, neo4jData]);
 
   useEffect(() => {
     if (selection === null) {
