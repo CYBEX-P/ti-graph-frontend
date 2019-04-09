@@ -107,7 +107,6 @@ const Graph = ({ isLoading }) => {
           zIndex: 2,
           display: 'grid'
         }}
-        // onClick={() => network !== null && setSelection(network.getSelection())}
       />
       {isLoading && (
         <div
