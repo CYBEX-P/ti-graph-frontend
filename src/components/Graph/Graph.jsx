@@ -68,6 +68,7 @@ const Graph = ({ isLoading }) => {
     if (nw === null) {
       return false;
     }
+    // hoverNode fires whenever the mouse hovers over a node
     nw.on('hoverNode', e => {
       if (typeof data.Neo4j !== 'undefined') {
         return setHoverText({
@@ -79,12 +80,16 @@ const Graph = ({ isLoading }) => {
       }
       return setHoverText(null);
     });
+    // blurNode fires when leaving a node
     nw.on('blurNode', () => setHoverText(null));
+
+    // Change the selection state whenever a node is selected and deselected
     nw.on('deselectNode', () => setSelection(nw.getSelection()));
     nw.on('selectNode', () => {
       setSelection(nw.getSelection());
     });
 
+    // Set state when drag starts and ends. Used to determine whether to draw radial menu or not
     nw.on('dragStart', () => {
       setDragStart(true);
     });
@@ -92,6 +97,7 @@ const Graph = ({ isLoading }) => {
       setDragStart(false);
     });
 
+    // Similar to dragStart and dragEnd, but changes the selection state during stabilization
     nw.on('startStabilizing', () => {
       setSelection({ nodes: [], edges: [] });
       setIsStabilized(false);
@@ -100,6 +106,9 @@ const Graph = ({ isLoading }) => {
       setSelection(nw.getSelection());
       setIsStabilized(true);
     });
+
+    // We just get rid of the selection and radial menu on zoom since there isn't a good way to tell
+    // when zoom ends and begins
     nw.on('zoom', () => {
       setRadialPosition(null);
       if (selection !== null) {
