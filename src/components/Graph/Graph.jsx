@@ -36,6 +36,10 @@ function InitializeGraph(data) {
 
 const Graph = ({ isLoading }) => {
   const { neo4jData } = useContext(NetworkContext);
+
+  const [isStabilized, setIsStabilized] = useState(true);
+  const [dragStart, setDragStart] = useState(false);
+
   const [hoverText, setHoverText] = useState(null);
   const [selection, setSelection] = useState({ nodes: [], edges: [] });
   const [radialPosition, setRadialPosition] = useState(null);
@@ -80,20 +84,21 @@ const Graph = ({ isLoading }) => {
     nw.on('selectNode', () => {
       setSelection(nw.getSelection());
     });
+
     nw.on('dragStart', () => {
-      setRadialPosition(null);
-    });
-    nw.on('stabilized', () => {
-      if (selection !== null) {
-        setSelection(null);
-        nw.unselectAll();
-      }
+      setDragStart(true);
     });
     nw.on('dragEnd', () => {
-      if (selection !== null) {
-        setSelection(null);
-        nw.unselectAll();
-      }
+      setDragStart(false);
+    });
+
+    nw.on('startStabilizing', () => {
+      setSelection({ nodes: [], edges: [] });
+      setIsStabilized(false);
+    });
+    nw.on('stabilized', () => {
+      setSelection(nw.getSelection());
+      setIsStabilized(true);
     });
     nw.on('zoom', () => {
       setRadialPosition(null);
@@ -104,6 +109,20 @@ const Graph = ({ isLoading }) => {
     });
     return true;
   }
+
+  useEffect(() => {
+    if (!dragStart) {
+      return UpdatePositions();
+    }
+    return setRadialPosition(null);
+  }, [dragStart]);
+
+  useEffect(() => {
+    if (isStabilized) {
+      return UpdatePositions();
+    }
+    return setRadialPosition(null);
+  }, [isStabilized]);
 
   useEffect(() => {
     if (typeof neo4jData.Neo4j !== 'undefined') {
