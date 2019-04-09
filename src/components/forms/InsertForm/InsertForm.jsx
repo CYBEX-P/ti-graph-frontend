@@ -5,7 +5,7 @@ import axios from 'axios';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
-import NetworkContext from '../../App/NetworkContext';
+import NetworkContext from '../../App/DataContext';
 import ModalContext from '../../App/ModalContext';
 import MenuContext from '../../App/MenuContext';
 
@@ -93,7 +93,7 @@ const InsertForm = props => {
                 </option>
               ))}
             </select>
-            
+
             <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />

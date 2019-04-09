@@ -9,7 +9,7 @@ import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
-import NetworkContext from './NetworkContext';
+import NetworkContext from './DataContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 

@@ -3,7 +3,7 @@ import { Network } from 'vis';
 import PropTypes from 'prop-types';
 import { CircleLoader } from 'react-spinners';
 
-import NetworkContext from '../App/NetworkContext';
+import NetworkContext from '../App/DataContext';
 import RadialMenu from '../radialMenu/radialMenu';
 
 function InitializeGraph(data) {
@@ -84,6 +84,12 @@ const Graph = ({ isLoading }) => {
       setRadialPosition(null);
     });
     nw.on('stabilized', () => {
+      if (selection !== null) {
+        setSelection(null);
+        nw.unselectAll();
+      }
+    });
+    nw.on('dragEnd', () => {
       if (selection !== null) {
         setSelection(null);
         nw.unselectAll();
