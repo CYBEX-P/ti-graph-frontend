@@ -2,6 +2,7 @@ import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {Container} from 'reactstrap';
 
 import NavBar from '../navBar/navBar';
 import MenuBar from '../menuBar/menuBar';
@@ -13,6 +14,7 @@ import Graph from '../Graph/Graph';
 import NetworkContext from './NetworkContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
+import EventInsertForm from '../EventInsertForm/EventInsertForm';
 
 function UpdateGraph(data) {
   const { nodes } = data.Neo4j[0][0];
@@ -131,6 +133,12 @@ const App = props => {
             </div>
           </GraphModal>
 
+          <GraphModal title="New Event Form">
+            <Container>
+              <EventInsertForm config={props.config}/>
+            </Container>
+          </GraphModal>
+
           <AppContainer>
             <ContentContainerStyle>
               <Graph isLoading={isLoading} />
@@ -161,6 +169,9 @@ const App = props => {
                 <InsertForm config={props.config} />
                 <Button width="100%" onClickFunction={() => handleEnrichAll()}>
                   Enrich All
+                </Button>
+                <Button width="100%" onClickFunction={() => dispatchModal('New Event Form')}>
+                  <div>New Event</div>
                 </Button>
               </div>
             </MenuBar>

@@ -76,7 +76,7 @@ const InsertForm = props => {
         onSubmit={handleInsertIP}
         validationSchema={InsertIPSchema}
         initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
-        render={({ handleChange, errors, values, handleSubmit }) => (
+        render={({ handleChange, errors, values, handleSubmit }) => ( 
           <form onSubmit={handleSubmit}>
             <select
               style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
