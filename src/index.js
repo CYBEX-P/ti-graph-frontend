@@ -42,7 +42,15 @@ library.add(
 
 let YAMLConfig = {};
 
-axios.get(`/admin/config`).then(({ data }) => {
-  YAMLConfig = data;
-  ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));
-});
+axios
+  .get(`/admin/config`)
+  .then(({ data }) => {
+    YAMLConfig = data;
+    ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));
+  })
+  .catch(() => {
+    ReactDOM.render(
+      <h1 className="text-center">Oops! We were not able to get a response from the server.</h1>,
+      document.getElementById('root')
+    );
+  });
