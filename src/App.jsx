@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import Navbar from './pages/Navbar';
-import Landing from './pages/Landing';
+import MainApp from './components/App/MainApp';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
@@ -15,8 +14,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <Navbar />
-        <Route exact path="/" component={Landing} />
+        <Route exact path="/" component={MainApp} />
         <div className="container">
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
