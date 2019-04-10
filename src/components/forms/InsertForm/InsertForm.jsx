@@ -93,7 +93,7 @@ const InsertForm = props => {
                 </option>
               ))}
             </select>
-            
+
             <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />

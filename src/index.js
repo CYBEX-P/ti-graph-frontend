@@ -19,7 +19,8 @@ import {
   faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import App from './components/App/App';
+// import MainApp from './components/App/MainApp';
+import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 library.add(
