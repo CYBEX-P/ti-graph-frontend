@@ -10,11 +10,11 @@ import Found from './pages/Found';
 import Remove from './pages/Remove';
 import Update from './pages/Update';
 
-const App = () => {
+const App = ({ config }) => {
   return (
     <Router>
       <div className="App">
-        <Route component={MainApp} />
+        <Route component={() => <MainApp config={config} />} />
         <div className="container">
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
