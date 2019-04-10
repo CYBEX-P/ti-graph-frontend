@@ -1,6 +1,5 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import NavBar from '../navBar/navBar';
@@ -10,7 +9,7 @@ import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
-import NetworkContext from './NetworkContext';
+import NetworkContext from './DataContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 
@@ -31,13 +30,9 @@ const App = props => {
     return action;
   }, false);
 
-  const [neo4jData, setNeo4jData] = useState('');
-
-  const [network, setNetwork] = useState(null);
+  const [neo4jData, setNeo4jData] = useState({});
 
   const [errorToDisplay, setError] = useState(null);
-
-  const [hoverText, setHoverText] = useState(null);
 
   function handleEnrichAll() {
     setLoading(true);
@@ -61,44 +56,6 @@ const App = props => {
       });
   }
 
-  function UpdateGraph(data) {
-    const { nodes } = data.Neo4j[0][0];
-    const { edges } = data.Neo4j[1][0];
-    const dataObject = { nodes, edges };
-
-    const options = {
-      layout: { improvedLayout: true },
-      height: '99vh',
-      nodes: {
-        shape: 'circle',
-        widthConstraint: 100
-      },
-      edges: {
-        length: 200
-      },
-      interaction: {
-        hover: true,
-        hoverConnectedEdges: false
-      }
-    };
-    const container = document.getElementById('mynetwork');
-    const nw = new Network(container, dataObject, options);
-    nw.on('hoverNode', e => {
-      if (typeof neo4jData.Neo4j !== 'undefined') {
-        return setHoverText({
-          text: JSON.stringify(
-            neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === e.node)[0].properties
-          ),
-          x: e.event.clientX,
-          y: e.event.clientY
-        });
-      }
-      return setHoverText(null);
-    });
-    nw.on('blurNode', () => setHoverText(null));
-    return nw;
-  }
-
   // Get data on first render
   useEffect(() => {
     axios.get('/neo4j/export').then(({ data }) => {
@@ -106,17 +63,10 @@ const App = props => {
     });
   }, []);
 
-  // Update graph whenever data updates
-  useEffect(() => {
-    if (neo4jData !== '') {
-      setNetwork(UpdateGraph(neo4jData));
-    }
-  }, [neo4jData]);
-
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand, setLoading }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal, setError }}>
-        <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>
+        <NetworkContext.Provider value={{ neo4jData, setNeo4jData }}>
           {/* Keep modals here */}
           <GraphModal title="example" contentLabel="Example Modal">
             <div>Content will go here soon!</div>
@@ -230,20 +180,6 @@ const App = props => {
                 </div>
               </div>
             </MenuBar>
-            {hoverText && (
-              <div
-                style={{
-                  position: 'absolute',
-                  zIndex: 1000,
-                  top: hoverText.y,
-                  left: hoverText.x,
-                  backgroundColor: '#111',
-                  color: '#fff'
-                }}
-              >
-                {hoverText.text}
-              </div>
-            )}
           </AppContainer>
         </NetworkContext.Provider>
       </ModalContext.Provider>
