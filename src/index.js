@@ -16,7 +16,8 @@ import {
   faPlusCircle,
   faServer,
   faMeh,
-  faInfoCircle
+  faInfoCircle,
+  faProjectDiagram
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import App from './components/App/App';
@@ -36,7 +37,8 @@ library.add(
   faPlusCircle,
   faServer,
   faMeh,
-  faInfoCircle
+  faInfoCircle,
+  faProjectDiagram
 );
 
 let YAMLConfig = {};
