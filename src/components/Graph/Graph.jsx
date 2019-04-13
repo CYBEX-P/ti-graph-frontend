@@ -5,6 +5,7 @@ import { CircleLoader } from 'react-spinners';
 
 import NetworkContext from '../App/DataContext';
 import RadialMenu from '../radialMenu/radialMenu';
+import withNodeType from '../radialMenu/withNodeType';
 
 function InitializeGraph(data) {
   if (typeof data.Neo4j === 'undefined') {
@@ -42,6 +43,7 @@ const Graph = ({ isLoading }) => {
 
   const [hoverText, setHoverText] = useState(null);
   const [selection, setSelection] = useState({ nodes: [], edges: [] });
+  const [selectedNodeType, setSelectedNodeType] = useState(null);
   const [radialPosition, setRadialPosition] = useState(null);
   const [eventListenersAdded, setEventListenersAdded] = useState(false);
 
@@ -58,6 +60,11 @@ const Graph = ({ isLoading }) => {
     const selectedNode = selection.nodes[0];
     const canvasPositions = network.getPositions(selection.nodes)[selectedNode];
     const domPositions = network.canvasToDOM(canvasPositions);
+    setSelectedNodeType(
+      Object.keys(
+        neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === selection.nodes[0])[0].properties
+      )[0]
+    );
     return setRadialPosition(domPositions);
   }
 
@@ -149,13 +156,18 @@ const Graph = ({ isLoading }) => {
 
   useEffect(() => {
     if (selection === null) {
+      setSelectedNodeType(null);
       return setRadialPosition(null);
     }
     if (selection.nodes.length !== 0) {
       return UpdatePositions();
     }
+    setSelectedNodeType(null);
     return setRadialPosition(null);
   }, [selection]);
+
+  // HOC that returns the radial menu to use
+  const RadialToRender = withNodeType(RadialMenu, selectedNodeType);
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: '56px auto' }}>
@@ -192,15 +204,7 @@ const Graph = ({ isLoading }) => {
           </div>
         </div>
       )}
-      {radialPosition && (
-        <RadialMenu
-          icons={['info-circle', 'edit']}
-          position={radialPosition}
-          onClickFunctions={[() => {}]}
-          network={network}
-          scale={network.getScale()}
-        />
-      )}
+      {radialPosition && <RadialToRender position={radialPosition} network={network} scale={network.getScale()} />}
       {hoverText && (
         <div
           style={{
