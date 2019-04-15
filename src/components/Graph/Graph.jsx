@@ -50,7 +50,7 @@ const Graph = ({ isLoading }) => {
   const [network, setNetwork] = useState(null);
 
   function UpdatePositions() {
-    if (network === null) {
+    if (network === null || selection === null) {
       return setRadialPosition(null);
     }
     if (typeof selection.nodes[0] === 'undefined') {
