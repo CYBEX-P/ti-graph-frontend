@@ -9,12 +9,12 @@ export const register = newUser => {
       username: newUser.username,
       password: newUser.password
     })
-    .then(() => {});
+    .then(() => { });
 };
 
 export const login = user => {
   return axios
-    .post('/login', {
+    .post('users/login', {
       username: user.username,
       password: user.password
     })

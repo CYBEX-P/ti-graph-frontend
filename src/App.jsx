@@ -14,7 +14,7 @@ const App = ({ config }) => {
   return (
     <Router>
       <div className="App">
-        <Route component={() => <MainApp config={config} />} />
+        <Route exact path="/" component={() => <MainApp config={config} />} />
         <div className="container">
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
