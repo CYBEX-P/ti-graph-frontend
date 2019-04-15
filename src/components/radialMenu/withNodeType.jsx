@@ -44,8 +44,9 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
     onClickFns = config.enrichments.SrcIP.map(enrichmentType => () => {
       return EnrichIPbyType(enrichmentType);
     });
+    titles = config.enrichments.SrcIP;
     onClickFns.push(() => EnrichIPAll());
-    titles = ['asn', 'gip', 'hostname', 'whois', 'cybex', 'all'];
+    titles.push('all');
   }
   return props => {
     return <RadialMenuComponent titles={titles} icons={icons} onClickFunctions={onClickFns} {...props} />;
