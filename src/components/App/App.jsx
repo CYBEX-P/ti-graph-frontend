@@ -9,7 +9,7 @@ import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
-import NetworkContext from './DataContext';
+import DataContext from './DataContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 
@@ -66,7 +66,7 @@ const App = props => {
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand, setLoading }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal, setError }}>
-        <NetworkContext.Provider value={{ neo4jData, setNeo4jData }}>
+        <DataContext.Provider value={{ config: props.config, neo4jData, setNeo4jData }}>
           {/* Keep modals here */}
           <GraphModal title="example" contentLabel="Example Modal">
             <div>Content will go here soon!</div>
@@ -181,7 +181,7 @@ const App = props => {
               </div>
             </MenuBar>
           </AppContainer>
-        </NetworkContext.Provider>
+        </DataContext.Provider>
       </ModalContext.Provider>
     </MenuContext.Provider>
   );

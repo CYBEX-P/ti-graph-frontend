@@ -36,7 +36,7 @@ function InitializeGraph(data) {
 }
 
 const Graph = ({ isLoading }) => {
-  const { neo4jData, setNeo4jData } = useContext(NetworkContext);
+  const { neo4jData, setNeo4jData, config } = useContext(NetworkContext);
 
   const [isStabilized, setIsStabilized] = useState(true);
   const [dragStart, setDragStart] = useState(false);
@@ -165,7 +165,7 @@ const Graph = ({ isLoading }) => {
   }, [selection]);
 
   // HOC that returns the radial menu to use
-  const RadialToRender = withNodeType(RadialMenu, selectedNodeType, setNeo4jData);
+  const RadialToRender = withNodeType(RadialMenu, selectedNodeType, setNeo4jData, config);
 
   return (
     <div style={{ display: 'grid', gridTemplateRows: '56px auto' }}>

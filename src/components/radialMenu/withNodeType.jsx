@@ -7,7 +7,7 @@
 import React from 'react';
 import axios from 'axios';
 
-function withNodeType(RadialMenuComponent, nodeType, setNeo4jData) {
+function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
   if (nodeType === null) {
     return <></>;
   }
@@ -22,36 +22,29 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData) {
     });
   }
 
+  function EnrichIPAll() {
+    config.enrichments.SrcIP.map(enrichmentType => {
+      axios.get(`/enrich/${enrichmentType}/${nodeType.IP}`).then(({ data }) => {
+        if (data['insert status'] !== 0) {
+          axios.get('neo4j/export').then(response => {
+            setNeo4jData(response.data);
+          });
+        }
+      });
+      return true;
+    });
+  }
+
   let icons = [];
   let onClickFns = [];
   let titles = [];
   if (Object.keys(nodeType)[0] === 'IP') {
     icons = ['server', 'globe', 'project-diagram', 'user', 'passport', 'plus-circle'];
     // We could probably find a way to do this by YAML instead of hardcoding it
-    onClickFns = [
-      () => {
-        EnrichIPbyType('asn');
-      },
-      () => {
-        EnrichIPbyType('gip');
-      },
-      () => {
-        EnrichIPbyType('hostname');
-      },
-      () => {
-        EnrichIPbyType('whois');
-      },
-      () => {
-        EnrichIPbyType('cybex');
-      },
-      () => {
-        EnrichIPbyType('asn');
-        EnrichIPbyType('gip');
-        EnrichIPbyType('hostname');
-        EnrichIPbyType('whois');
-        EnrichIPbyType('cybex');
-      }
-    ];
+    onClickFns = config.enrichments.SrcIP.map(enrichmentType => () => {
+      return EnrichIPbyType(enrichmentType);
+    });
+    onClickFns.push(() => EnrichIPAll());
     titles = ['asn', 'gip', 'hostname', 'whois', 'cybex', 'all'];
   }
   return props => {
