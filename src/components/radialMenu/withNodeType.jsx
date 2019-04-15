@@ -45,9 +45,8 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
     });
     // Copy arrays
     titles = config.enrichments.SrcIP.map(val => val);
-    icons = config.enrichments.SrcIP.map(val => val);
     titles.push('all');
-    icons.push('all');
+    icons = titles.map(val => val);
     onClickFns.push(() => EnrichIPAll());
   }
   return props => {
