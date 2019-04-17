@@ -23,7 +23,6 @@ class Remove extends Component {
     };
 
     remove(user).then(res => {
-      // this.props.history.push('/login')
       console.log('deleted');
     });
   }
