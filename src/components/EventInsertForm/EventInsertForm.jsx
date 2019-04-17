@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Input, Label, Form } from 'reactstrap';
 import axios from 'axios';
 import NetworkContext from '../App/NetworkContext';
@@ -31,6 +31,7 @@ const FormRow = (props) => {
 
 const EventInsertForm = props => {
   const { neo4jData, setNeo4jData } = useContext(NetworkContext);
+  const [ eventData, setEventData ]  = useState("");
 
   function handleEventInsert(Eventname) {
     axios.post('/event/start', {name: Eventname}).then(({ data }) => {
@@ -40,7 +41,7 @@ const EventInsertForm = props => {
  
   return (
     <>
-      <Form onSubmit = {(e) = {console.log(e)}}>
+      <Form onSubmit = {(e) => {console.log(e)}}>
         <Row>
             <Label>Event Name:</Label>
             <Input type="text" placeholder="Enter Event Name Here" 
@@ -62,7 +63,7 @@ const EventInsertForm = props => {
             </Col>
 
             <Col sm={{size: 6, offset: 3}}>
-                <Button width="60%" hasIcon type="submit">
+                <Button width="60%" hasIcon type="submit" onClickFunction = {() => {}}>
                     <FontAwesomeIcon size="lg" icon="plus-circle" />
                     <div>Start Investigation</div>
                 </Button>   
