@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import MainApp from './components/App/MainApp';
@@ -9,13 +9,19 @@ import Find from './pages/Find';
 import Found from './pages/Found';
 import Remove from './pages/Remove';
 import Update from './pages/Update';
+import NavBar from './components/navBar/navBar';
+import MenuContext from './components/App/MenuContext';
 
 const App = ({ config }) => {
+  const [isExpanded, dispatchExpand] = useState('none');
   return (
     <Router>
       <div className="App">
         <Route exact path="/" component={() => <MainApp config={config} />} />
-        <div className="container">
+        <MenuContext.Provider value={{ dispatchExpand, isExpanded }}>
+          <NavBar />
+        </MenuContext.Provider>
+        <div style={{ paddingTop: '56px' }} className="container">
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/profile" component={Profile} />

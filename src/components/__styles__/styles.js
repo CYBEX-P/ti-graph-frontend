@@ -35,6 +35,7 @@ const NavBarStyle = styled.nav`
   grid-row: 1;
   display: flex;
   align-items: center;
+  position: fixed;
   color: ${secondaryGrey};
 `;
 
