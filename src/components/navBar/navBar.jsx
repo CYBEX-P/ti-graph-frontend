@@ -40,32 +40,38 @@ const NavBar = () => {
           <ul style={{ marginLeft: '12px' }} className="navbar-nav">
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/">
-                Home
+                <FontAwesomeIcon fixedWidth size="lg" icon="home" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Home</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/login">
-                Login
+                <FontAwesomeIcon fixedWidth size="lg" icon="user" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Login</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/register">
-                Register
+                <FontAwesomeIcon fixedWidth size="lg" icon="user-plus" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Register</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/find">
-                Find User
+                <FontAwesomeIcon fixedWidth size="lg" icon="search" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Find User</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/remove">
-                Delete
+                <FontAwesomeIcon fixedWidth size="lg" icon="user-slash" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Delete</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link onClick={() => dispatchExpand('none')} className="nav-link text-light" to="/update">
-                Update
+                <FontAwesomeIcon fixedWidth size="lg" icon="pen" color="#e0e0e0" />
+                <span style={{ paddingLeft: '12px' }}>Update</span>
               </Link>
             </li>
           </ul>

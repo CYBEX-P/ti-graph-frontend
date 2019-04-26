@@ -13,13 +13,17 @@ import {
   faChevronCircleDown,
   faTimes,
   faUser,
+  faUserPlus,
+  faUserSlash,
   faPlusCircle,
   faServer,
   faMeh,
   faInfoCircle,
   faProjectDiagram,
   faGlobe,
-  faPassport
+  faPassport,
+  faHome,
+  faPen
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import App from './App';
@@ -36,13 +40,17 @@ library.add(
   faChevronCircleDown,
   faTimes,
   faUser,
+  faUserPlus,
+  faUserSlash,
   faPlusCircle,
   faServer,
   faMeh,
   faInfoCircle,
   faProjectDiagram,
   faGlobe,
-  faPassport
+  faPassport,
+  faHome,
+  faPen
 );
 
 let YAMLConfig = {};

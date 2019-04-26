@@ -16,12 +16,12 @@ const App = ({ config }) => {
   const [isExpanded, dispatchExpand] = useState('none');
   return (
     <Router>
-      <div className="App">
+      <div style={{ minHeight: '100vh', backgroundColor: '#efefef' }} className="App">
         <Route exact path="/" component={() => <MainApp config={config} />} />
         <MenuContext.Provider value={{ dispatchExpand, isExpanded }}>
           <NavBar />
         </MenuContext.Provider>
-        <div style={{ paddingTop: '56px' }} className="container">
+        <div style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '32px' }} className="container">
           <Route exact path="/register" component={Register} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/profile" component={Profile} />
