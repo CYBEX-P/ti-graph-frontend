@@ -13,13 +13,20 @@ import {
   faChevronCircleDown,
   faTimes,
   faUser,
+  faUserPlus,
+  faUserSlash,
   faPlusCircle,
   faServer,
   faMeh,
-  faInfoCircle
+  faInfoCircle,
+  faProjectDiagram,
+  faGlobe,
+  faPassport,
+  faHome,
+  faPen
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import App from './components/App/App';
+import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 library.add(
@@ -33,15 +40,30 @@ library.add(
   faChevronCircleDown,
   faTimes,
   faUser,
+  faUserPlus,
+  faUserSlash,
   faPlusCircle,
   faServer,
   faMeh,
-  faInfoCircle
+  faInfoCircle,
+  faProjectDiagram,
+  faGlobe,
+  faPassport,
+  faHome,
+  faPen
 );
 
 let YAMLConfig = {};
 
-axios.get(`/admin/config`).then(({ data }) => {
-  YAMLConfig = data;
-  ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));
-});
+axios
+  .get(`/admin/config`)
+  .then(({ data }) => {
+    YAMLConfig = data;
+    ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));
+  })
+  .catch(() => {
+    ReactDOM.render(
+      <h1 className="text-center">Oops! We were not able to get a response from the server.</h1>,
+      document.getElementById('root')
+    );
+  });
