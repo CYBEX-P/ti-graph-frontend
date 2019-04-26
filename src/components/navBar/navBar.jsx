@@ -1,10 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavBarStyle, UnstyledButton } from '../__styles__/styles';
 import MenuContext from '../App/MenuContext';
+import axios from 'axios';
 
 const NavBar = () => {
   const { isExpanded, dispatchExpand } = useContext(MenuContext);
+  const [eventName, setEventName] = useState('');
+
+  function getEventName() {
+    axios.get(`/event/getName`).then(({data}) => {
+      setEventName(data);
+    })
+  }
+
   return (
     <>
       <NavBarStyle>
@@ -15,7 +24,7 @@ const NavBar = () => {
         >
           <FontAwesomeIcon size="lg" icon="bars" color="#e0e0e0" />
         </UnstyledButton>
-        <div style={{ flexGrow: 2, textAlign: 'center' }}>ti-graph</div>
+        <div style={{ flexGrow: 2, textAlign: 'center' }}>ti-graph Event: {eventName}</div>
         <UnstyledButton onClick={() => {}}>
           <FontAwesomeIcon size="lg" icon="user" color="#e0e0e0" />
         </UnstyledButton>

@@ -202,7 +202,7 @@ const App = props => {
                 </div>
                 <div style={{ gridColumn: 1 }}>
                   <Button width="40%" type="button" onClickFunction={() => dispatchModal('Neo4j Data')}>
-                    Neo4j Data
+                    Export JSON Data
                   </Button>
                 </div>
                 <div style={{ gridColumn: 2 }}>
