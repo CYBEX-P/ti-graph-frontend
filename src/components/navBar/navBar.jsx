@@ -2,17 +2,12 @@ import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavBarStyle, UnstyledButton } from '../__styles__/styles';
 import MenuContext from '../App/MenuContext';
+import EventContext from '../App/EventContext'
 import axios from 'axios';
 
 const NavBar = () => {
   const { isExpanded, dispatchExpand } = useContext(MenuContext);
-  const [eventName, setEventName] = useState('');
-
-  function getEventName() {
-    axios.get(`/event/getName`).then(({data}) => {
-      setEventName(data);
-    })
-  }
+  const { eventName } = useContext(EventContext);
 
   return (
     <>
