@@ -36,11 +36,25 @@ const EventInsertForm = props => {
     dispatchModal(false);
   }
 
+  function handleInsertFile(values, actions) {
+    console.log(values);
+    axios.post(`/event/start/file`, values
+    ).then(({data}) => {
+      console.log(data)
+    })
+
+    actions.resetForm();
+    dispatchModal(false);
+  } 
+
+
+
+
   const formRow = (props) => {
     return (
       <Formik
       onSubmit={handleInsertIP}
-      initialValues={{ dataToInsert: '', IOCType: 'SrcIP', eventName: '' }}
+      initialValues={{ dataToInsert: '', IOCType: 'IP', eventName: '' }}
       render={({ handleChange, errors, values, handleSubmit }) => ( 
         <form onSubmit={handleSubmit}>  
         <Row>
@@ -74,7 +88,7 @@ const EventInsertForm = props => {
     <>
       <Formik
         onSubmit={handleInsertIP}
-        initialValues={{ dataToInsert1: '', IOCType1: 'SrcIP', dataToInsert2: '', IOCType2: 'SrcIP', dataToInsert3: '', IOCType3: 'SrcIP' }}
+        initialValues={{ dataToInsert1: '', IOCType1: 'IP', dataToInsert2: '', IOCType2: 'IP', dataToInsert3: '', IOCType3: 'IP' }}
         render={({ handleChange, errors, values, handleSubmit }) => ( 
           <form onSubmit={handleSubmit}>
             <Row>
@@ -160,7 +174,7 @@ const EventInsertForm = props => {
               </Col>
 
               <Col sm={{size: 6, offset: 3}}>
-                  <Button width="60%" hasIcon type="submit" onClickFunction = {() => {setAddRow(true)}}>
+                  <Button width="60%" hasIcon type="submit" onClickFunction = {() => {}}>
                       <FontAwesomeIcon size="lg" icon="plus-circle" />
                       <div>Start Investigation</div>
                   </Button>   
@@ -170,14 +184,27 @@ const EventInsertForm = props => {
         )}
       />
       <br/>
-      <form>
-        <Row>
-          <Col sm={{size: 3, offset: 3}}>
-            <Label for="file">File</Label>
-            <Input type="file" name="file" id="file" />
-          </Col>
-        </Row>
-      </form> 
+      <Formik
+        onSubmit={handleInsertFile}
+        initialValues={{ file: '' }}
+        render={({values, handleSubmit, setFieldValue }) => ( 
+        <form onSubmit={handleSubmit}>
+          <Row>
+            <Col sm={{size: 3, offset: 3}}>
+              <Label for="file">File</Label>
+              <Input type="file" name="file" id="file" onChange={(event) => {
+                setFieldValue("file", event.currentTarget.files[0]);
+              }}/>
+            </Col>
+            <Col sm={{size: 6, offset: 3}}>
+                  <Button width="60%" hasIcon type="submit" onClickFunction = {() => {}}>
+                      <div>Start Investigation From File</div>
+                  </Button>   
+              </Col> 
+          </Row>
+        </form> 
+        )}
+      />
     </>
   );
 };

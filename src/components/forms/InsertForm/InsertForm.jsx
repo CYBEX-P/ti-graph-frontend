@@ -19,12 +19,12 @@ const InsertForm = props => {
   const { dispatchModal, setError } = useContext(ModalContext);
   const { setLoading } = useContext(MenuContext);
 
-  const [selectedIOC, setSelectedIOC] = useState('SrcIP');
+  const [selectedIOC, setSelectedIOC] = useState('IP');
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
+      axios.get(`/neo4j/insert/${selectedIOC}/${ipToInsert}`).then(() => {
         axios
           .get('neo4j/export')
           .then(({ data }) => {
@@ -74,8 +74,8 @@ const InsertForm = props => {
     <>
       <Formik
         onSubmit={handleInsertIP}
-        validationSchema={InsertIPSchema}
-        initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
+        //validationSchema={InsertIPSchema}
+        initialValues={{ ipToInsert: '', IOCType: 'IP' }}
         render={({ handleChange, errors, values, handleSubmit }) => ( 
           <form onSubmit={handleSubmit}>
             <select
@@ -94,7 +94,7 @@ const InsertForm = props => {
               ))}
             </select>
             
-            <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+            <Input placeholder="Data Value" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />
               <div>Insert IP</div>
@@ -131,9 +131,9 @@ const InsertForm = props => {
                 neo4jData.Neo4j[0].map(({ nodes }) =>
                   nodes.map(({ properties, id }) => {
                     return (
-                      properties.IP && (
-                        <option key={id} value={properties.IP} label={properties.IP}>
-                          {properties.IP}
+                      properties.data && (
+                        <option key={id} value={properties.data} label={properties.data}>
+                          {properties.data}
                         </option>
                       )
                     );
