@@ -19,7 +19,7 @@ const NavBar = () => {
         >
           <FontAwesomeIcon size="lg" icon="bars" color="#e0e0e0" />
         </UnstyledButton>
-        <div style={{ flexGrow: 2, textAlign: 'center' }}>ti-graph Event: {eventName}</div>
+        <div style={{ flexGrow: 2, textAlign: 'center' }}>ti-graph Event: {eventName||"Temp Event"}</div>
         <UnstyledButton onClick={() => {}}>
           <FontAwesomeIcon size="lg" icon="user" color="#e0e0e0" />
         </UnstyledButton>
