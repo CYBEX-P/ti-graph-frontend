@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { update } from './UserFunctions';
 
 class Update extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       username: '',
       first_name: '',
       last_name: '',
-      email: ''
+      email: '',
+      usernameError: '',
+      first_nameError: '',
+      last_nameError: '',
+      emailError: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -17,6 +21,31 @@ class Update extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+  validate = () => {
+    let first_nameError = '';
+    let last_nameError = '';
+    let emailError = '';
+    let usernameError = '';
+
+    if (!this.state.first_name) {
+      first_nameError = 'first name cannot be blank';
+    }
+    if (!this.state.last_name) {
+      last_nameError = 'last name cannot be blank';
+    }
+    if (!this.state.username && this.state.username.length < 4) {
+      usernameError = 'username cannot be blank';
+    }
+
+    if (!this.state.email.includes('@')) {
+      emailError = 'Invalid Email id';
+    }
+    if (emailError || first_nameError || last_nameError || usernameError) {
+      this.setState({ emailError, first_nameError, last_nameError, usernameError });
+      return false;
+    }
+    return true;
+  };
 
   onSubmit(e) {
     e.preventDefault();
@@ -27,10 +56,12 @@ class Update extends Component {
       last_name: this.state.last_name,
       email: this.state.email
     };
-
-    update(user).then(() => {
-      console.log('updated');
-    });
+    const isValid = this.validate();
+    if (isValid) {
+      update(user).then(() => {
+        console.log('updated');
+      });
+    }
   }
 
   render() {
@@ -52,6 +83,9 @@ class Update extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.usernameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.usernameError}</div>
+              ) : null}
 
               <div className="form-group">
                 <label htmlFor="first_name"> First Name </label>
@@ -64,6 +98,9 @@ class Update extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.first_nameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.first_nameError}</div>
+              ) : null}
 
               <div className="form-group">
                 <label htmlFor="last_name"> Last Name </label>
@@ -76,6 +113,9 @@ class Update extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.last_nameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.last_nameError}</div>
+              ) : null}
 
               <div className="form-group">
                 <label htmlFor="email"> Email Address </label>
@@ -88,6 +128,7 @@ class Update extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.emailError ? <div style={{ fontSize: 12, color: 'red' }}>{this.state.emailError}</div> : null}
 
               <button type="submit" className="btn btn-lg btn-primary btn-block">
                 Update
