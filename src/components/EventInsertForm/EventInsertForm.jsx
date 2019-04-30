@@ -38,8 +38,11 @@ const EventInsertForm = props => {
 
   function handleInsertFile(values, actions) {
     console.log(values);
-    axios.post(`/event/start/file`, values
-    ).then(({data}) => {
+    const formData = new FormData();
+    formData.append("file", values.file);
+
+    axios.post(`/event/start/file`, formData)
+    .then(({data}) => {
       console.log(data)
     })
 
