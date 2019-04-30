@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import { register } from './UserFunctions';
 
 class Register extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       first_name: '',
       last_name: '',
       email: '',
       username: '',
-      password: ''
+      password: '',
+      first_nameError: '',
+      last_nameError: '',
+      emailError: '',
+      usernameError: '',
+      passwordError: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -18,6 +23,36 @@ class Register extends Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
+
+  validate = () => {
+    let first_nameError = '';
+    let last_nameError = '';
+    let emailError = '';
+    let usernameError = '';
+    let passwordError = '';
+
+    if (!this.state.first_name) {
+      first_nameError = 'first name cannot be blank';
+    }
+    if (!this.state.last_name) {
+      last_nameError = 'last name cannot be blank';
+    }
+    if (!this.state.username && this.state.username.length < 4) {
+      usernameError = 'username cannot be blank';
+    }
+    if (!this.state.password && this.state.password.length < 8) {
+      passwordError = 'password too short';
+    }
+
+    if (!this.state.email.includes('@')) {
+      emailError = 'Invalid Email id';
+    }
+    if (emailError || first_nameError || last_nameError || usernameError || passwordError) {
+      this.setState({ emailError, first_nameError, last_nameError, usernameError, passwordError });
+      return false;
+    }
+    return true;
+  };
 
   onSubmit(e) {
     e.preventDefault();
@@ -30,9 +65,12 @@ class Register extends Component {
       password: this.state.password
     };
 
-    register(newUser).then(res => {
-      this.props.history.push('/login');
-    });
+    const isValid = this.validate();
+    if (isValid) {
+      register(newUser).then(res => {
+        this.props.history.push('/login');
+      });
+    }
   }
 
   render() {
@@ -54,6 +92,9 @@ class Register extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.first_nameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.first_nameError}</div>
+              ) : null}
 
               <div className="form-group">
                 <label htmlFor="last_name"> Last Name </label>
@@ -67,6 +108,10 @@ class Register extends Component {
                 />
               </div>
 
+              {this.state.last_nameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.last_nameError}</div>
+              ) : null}
+
               <div className="form-group">
                 <label htmlFor="email"> Email Address </label>
                 <input
@@ -78,6 +123,7 @@ class Register extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.emailError ? <div style={{ fontSize: 12, color: 'red' }}>{this.state.emailError}</div> : null}
 
               <div className="form-group">
                 <label htmlFor="username"> Username </label>
@@ -90,6 +136,9 @@ class Register extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.usernameError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.usernameError}</div>
+              ) : null}
 
               <div className="form-group">
                 <label htmlFor="password"> Password </label>
@@ -102,6 +151,9 @@ class Register extends Component {
                   onChange={this.onChange}
                 />
               </div>
+              {this.state.passwordError ? (
+                <div style={{ fontSize: 12, color: 'red' }}>{this.state.passwordError}</div>
+              ) : null}
               <button type="submit" className="btn btn-lg btn-primary btn-block">
                 Register
               </button>
