@@ -77,7 +77,7 @@ const EventInsertForm = props => {
             </select>
           </Col>
           <Col sm={{size: 6, offset: 1}}>
-            <Input placeholder="IP Address" name="dataToInsert" value={values.dataToInsert} onChange={handleChange} />
+            <Input placeholder="IOC Value" name="dataToInsert" value={values.dataToInsert} onChange={handleChange} />
           </Col>
         </Row>
         </form>
@@ -122,7 +122,7 @@ const EventInsertForm = props => {
                   </select>
               </Col>
               <Col sm={{size: 6, offset: 1}}>
-              <Input placeholder="IP Address" name="dataToInsert1" value={values.dataToInsert1} onChange={handleChange} />
+              <Input placeholder="IOC Value" name="dataToInsert1" value={values.dataToInsert1} onChange={handleChange} />
               </Col>
             </Row>
             <Row>
@@ -142,7 +142,7 @@ const EventInsertForm = props => {
                   </select>
               </Col>
               <Col sm={{size: 6, offset: 1}}>
-              <Input placeholder="IP Address" name="dataToInsert2" value={values.dataToInsert2} onChange={handleChange} />
+              <Input placeholder="IOC Value" name="dataToInsert2" value={values.dataToInsert2} onChange={handleChange} />
               </Col>
             </Row>
             <Row>
@@ -162,7 +162,7 @@ const EventInsertForm = props => {
                   </select>
               </Col>
               <Col sm={{size: 6, offset: 1}}>
-              <Input placeholder="IP Address" name="dataToInsert3" value={values.dataToInsert3} onChange={handleChange} />
+              <Input placeholder="IOC Value" name="dataToInsert3" value={values.dataToInsert3} onChange={handleChange} />
               </Col>
             </Row>
             <br/>
