@@ -28,7 +28,7 @@ const Landing = ({ isSignedIn }) => (
         <a href="/logout">Logout</a>
         <a href="/ti-graph">
           <Button width="100%" onClickFunction={() => {}}>
-            <div style={{ width: '100%', textAlign: 'center' }}>Gaph</div>
+            <div style={{ width: '100%', textAlign: 'center' }}>Graph</div>
           </Button>
         </a>
       </>
