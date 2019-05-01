@@ -40,11 +40,17 @@ const EventInsertForm = props => {
     console.log(values);
     const formData = new FormData();
     formData.append("file", values.file);
+    formData.append("eventName", values.eventName2)
 
     axios.post(`/event/start/file`, formData)
     .then(({data}) => {
-      console.log(data)
-    })
+      axios
+          .get('neo4j/export')
+          .then(({ data }) => {
+            setNeo4jData(data);
+          })
+          .catch(() => {});
+    });
 
     actions.resetForm();
     dispatchModal(false);
@@ -189,9 +195,19 @@ const EventInsertForm = props => {
       <br/>
       <Formik
         onSubmit={handleInsertFile}
-        initialValues={{ file: '' }}
-        render={({values, handleSubmit, setFieldValue }) => ( 
+        initialValues={{ file: '', eventName2: '' }}
+        render={({values, handleSubmit, setFieldValue, handleChange }) => ( 
         <form onSubmit={handleSubmit}>
+         <Row>
+            <Label>Event Name:</Label>
+            <Input type="text" placeholder="Enter Event Name Here" 
+                  style={{width:'81%', marginLeft: '15px'}} 
+                  id = "eventNameInput"
+                  name = "eventName2"
+                  value={values.eventName2}
+                  onChange={handleChange}
+                  />
+          </Row>
           <Row>
             <Col sm={{size: 3, offset: 3}}>
               <Label for="file">File</Label>
