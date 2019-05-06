@@ -2,17 +2,17 @@ import React, { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { Input } from 'reactstrap';
 import axios from 'axios';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
 import NetworkContext from '../../App/NetworkContext';
 import ModalContext from '../../App/ModalContext';
 import MenuContext from '../../App/MenuContext';
 
-const InsertIPSchema = Yup.object().shape({
-  // IP Validation very rough
-  ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
-});
+// const InsertIPSchema = Yup.object().shape({
+//   // IP Validation very rough
+//   ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
+// });
 
 const InsertForm = props => {
   const { neo4jData, setNeo4jData } = useContext(NetworkContext);

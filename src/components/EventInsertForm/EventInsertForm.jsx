@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Input, Label } from 'reactstrap';
 import axios from 'axios';
 import NetworkContext from '../App/NetworkContext';
@@ -7,17 +7,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../Button/Button';
 import { Formik } from 'formik';
 import ModalContext from '../App/ModalContext';
-import EventContext from '../App/EventContext';
 
 
 const EventInsertForm = props => {
-  const { neo4jData, setNeo4jData } = useContext(NetworkContext);
-  const [ isAddRow, setAddRow ] = useState(false);
-  const { isShowingModal, dispatchModal } = useContext(ModalContext);
+  const { setNeo4jData } = useContext(NetworkContext);
+  const { dispatchModal } = useContext(ModalContext);
 
   function handleInsertIP(values, actions) {
     console.log(values);
-    if (values.ipToInsert !== '') {
+    props.setEvent(values.eventName);
+    if (values.dataToInsert1 !== '') {
       axios.post(`/event/start`, values).then(() => {
         axios
           .get('neo4j/export')
@@ -26,11 +25,6 @@ const EventInsertForm = props => {
           })
           .catch(() => {});
       });
-  
-      axios.get(`/event/getName`).then(({data}) => {
-        
-      })
-
     }
     actions.resetForm();
     dispatchModal(false);
@@ -40,8 +34,8 @@ const EventInsertForm = props => {
     console.log(values);
     const formData = new FormData();
     formData.append("file", values.file);
-    formData.append("eventName", values.eventName2)
-
+    formData.append("eventName", values.eventName2);
+    props.setEvent(values.eventName2);
     axios.post(`/event/start/file`, formData)
     .then(({data}) => {
       axios
@@ -59,38 +53,38 @@ const EventInsertForm = props => {
 
 
 
-  const formRow = (props) => {
-    return (
-      <Formik
-      onSubmit={handleInsertIP}
-      initialValues={{ dataToInsert: '', IOCType: 'IP', eventName: '' }}
-      render={({ handleChange, errors, values, handleSubmit }) => ( 
-        <form onSubmit={handleSubmit}>  
-        <Row>
-          <Col sm={{size: 4}} style={{justifyContent: 'right'}}>
-            <select
-            style={{ width: '42%', height: '36px', backgroundColor: '#ffffff', color: '#222222', marginTop: 5, justifyContent: 'right' }}
-            name="IOCType"
-            value={values.IOCType}
-            id="type-1"
-            onChange={handleChange}
-            >
-            {props.config.types.map(item => (
-                <option value={item} label={item} key={item}>
-                {item}
-                </option>
-            ))}
-            </select>
-          </Col>
-          <Col sm={{size: 6, offset: 1}}>
-            <Input placeholder="IOC Value" name="dataToInsert" value={values.dataToInsert} onChange={handleChange} />
-          </Col>
-        </Row>
-        </form>
-      )}
-      />
-    );
-  };
+  // const formRow = (props) => {
+  //   return (
+  //     <Formik
+  //     onSubmit={handleInsertIP}
+  //     initialValues={{ dataToInsert: '', IOCType: 'IP', eventName: '' }}
+  //     render={({ handleChange, errors, values, handleSubmit }) => ( 
+  //       <form onSubmit={handleSubmit}>  
+  //       <Row>
+  //         <Col sm={{size: 4}} style={{justifyContent: 'right'}}>
+  //           <select
+  //           style={{ width: '42%', height: '36px', backgroundColor: '#ffffff', color: '#222222', marginTop: 5, justifyContent: 'right' }}
+  //           name="IOCType"
+  //           value={values.IOCType}
+  //           id="type-1"
+  //           onChange={handleChange}
+  //           >
+  //           {props.config.types.map(item => (
+  //               <option value={item} label={item} key={item}>
+  //               {item}
+  //               </option>
+  //           ))}
+  //           </select>
+  //         </Col>
+  //         <Col sm={{size: 6, offset: 1}}>
+  //           <Input placeholder="IOC Value" name="dataToInsert" value={values.dataToInsert} onChange={handleChange} />
+  //         </Col>
+  //       </Row>
+  //       </form>
+  //     )}
+  //     />
+  //   );
+  // };
 
  
   return (
@@ -172,9 +166,9 @@ const EventInsertForm = props => {
               </Col>
             </Row>
             <br/>
-            {
+            {/* {
               isAddRow?<formRow config={props.config}/>:<div></div>
-            }
+            } */}
             <Row>
               <Col sm={{size: 3}}>
                   <Button width="58%" onClickFunction={() => {}}>

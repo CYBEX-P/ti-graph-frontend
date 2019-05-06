@@ -12,7 +12,6 @@ import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
 import NetworkContext from './NetworkContext';
-import EventContext from './EventContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 import EventInsertForm from '../EventInsertForm/EventInsertForm';
@@ -61,6 +60,8 @@ const App = props => {
 
   const [errorToDisplay, setError] = useState(null);
 
+  const [ eventName, setEventName ] = useState(null);
+
   function handleEnrichAll() {
     setLoading(true);
     axios
@@ -101,7 +102,6 @@ const App = props => {
     <MenuContext.Provider value={{ isExpanded, dispatchExpand, setLoading }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal, setError }}>
         <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>
-          <EventContext.Provider value={"Hello"}>
             {/* Keep modals here */}
             <GraphModal title="example" contentLabel="Example Modal">
               <div>Content will go here soon!</div>
@@ -137,7 +137,7 @@ const App = props => {
 
             <GraphModal title="New Event Form">
               <Container>
-                <EventInsertForm config={props.config}/>
+                <EventInsertForm config={props.config} setEvent={setEventName}/>
               </Container>
             </GraphModal>
 
@@ -145,7 +145,7 @@ const App = props => {
               <ContentContainerStyle>
                 <Graph isLoading={isLoading} />
               </ContentContainerStyle>
-              <NavBar />
+              <NavBar eName={eventName}/>
               <MenuBar side="left" icon="search">
                 <button
                   type="button"
@@ -225,7 +225,6 @@ const App = props => {
                 </div>
               </MenuBar>
             </AppContainer>
-          </EventContext.Provider>
         </NetworkContext.Provider>
       </ModalContext.Provider>
     </MenuContext.Provider>
