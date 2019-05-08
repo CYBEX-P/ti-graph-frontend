@@ -13,7 +13,7 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
   }
 
   function EnrichIPbyType(type) {
-    axios.get(`/enrich/${type}/${nodeType.IP}`).then(({ data }) => {
+    axios.get(`/enrich/${type}/${nodeType.properties.data}`).then(({ data }) => {
       if (data['insert status'] !== 0) {
         axios.get('neo4j/export').then(response => {
           setNeo4jData(response.data);
@@ -23,8 +23,8 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
   }
 
   function EnrichIPAll() {
-    config.enrichments.SrcIP.map(enrichmentType => {
-      axios.get(`/enrich/${enrichmentType}/${nodeType.IP}`).then(({ data }) => {
+    config.enrichments.IP.map(enrichmentType => {
+      axios.get(`/enrich/${enrichmentType}/${nodeType.properties.data}`).then(({ data }) => {
         if (data['insert status'] !== 0) {
           axios.get('neo4j/export').then(response => {
             setNeo4jData(response.data);
@@ -38,13 +38,13 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
   let icons = [];
   let onClickFns = [];
   let titles = [];
-  if (Object.keys(nodeType)[0] === 'IP') {
+  if (nodeType.label === 'IP') {
     // We could probably find a way to do this by YAML instead of hardcoding it
-    onClickFns = config.enrichments.SrcIP.map(enrichmentType => () => {
+    onClickFns = config.enrichments.IP.map(enrichmentType => () => {
       return EnrichIPbyType(enrichmentType);
     });
     // Copy arrays
-    titles = config.enrichments.SrcIP.map(val => val);
+    titles = config.enrichments.IP.map(val => val);
     titles.push('all');
     icons = titles.map(val => val);
     onClickFns.push(() => EnrichIPAll());
