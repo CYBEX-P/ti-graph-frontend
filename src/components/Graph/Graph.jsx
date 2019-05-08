@@ -60,9 +60,7 @@ const Graph = ({ isLoading }) => {
     const selectedNode = selection.nodes[0];
     const canvasPositions = network.getPositions(selection.nodes)[selectedNode];
     const domPositions = network.canvasToDOM(canvasPositions);
-    setSelectedNodeType(
-      neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === selection.nodes[0])[0].properties
-    );
+    setSelectedNodeType(neo4jData.Neo4j[0][0].nodes.filter(properties => properties.id === selection.nodes[0])[0]);
     return setRadialPosition(domPositions);
   }
 
@@ -167,6 +165,7 @@ const Graph = ({ isLoading }) => {
   // HOC that returns the radial menu to use
   const RadialToRender = withNodeType(RadialMenu, selectedNodeType, setNeo4jData, config);
 
+  console.log(selectedNodeType);
   return (
     <div style={{ display: 'grid', gridTemplateRows: '56px auto' }}>
       <div
