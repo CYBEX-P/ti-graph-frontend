@@ -8,6 +8,7 @@ import MenuBar from '../menuBar/menuBar';
 import { AppContainer, ContentContainerStyle } from '../__styles__/styles';
 import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
+import NetworkContext from './NetworkContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
 import Button from '../Button/Button';
