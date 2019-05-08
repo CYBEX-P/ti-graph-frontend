@@ -5,7 +5,7 @@ import axios from 'axios';
 // import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
-import NetworkContext from '../../App/NetworkContext';
+import NetworkContext from '../../App/DataContext';
 import ModalContext from '../../App/ModalContext';
 import MenuContext from '../../App/MenuContext';
 

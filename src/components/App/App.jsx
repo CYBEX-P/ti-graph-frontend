@@ -1,6 +1,5 @@
 import React, { useReducer, useState, useEffect } from 'react';
 import axios from 'axios';
-import { Network } from 'vis';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {Container} from 'reactstrap';
 
@@ -11,31 +10,9 @@ import MenuContext from './MenuContext';
 import ModalContext from './ModalContext';
 import GraphModal from '../modal/graphModal';
 import Graph from '../Graph/Graph';
-import NetworkContext from './NetworkContext';
 import Button from '../Button/Button';
 import InsertForm from '../forms/InsertForm/InsertForm';
 import EventInsertForm from '../EventInsertForm/EventInsertForm';
-
-function UpdateGraph(data) {
-  const { nodes } = data.Neo4j[0][0];
-  const { edges } = data.Neo4j[1][0];
-  const dataObject = { nodes, edges };
-
-  const options = {
-    layout: { improvedLayout: true },
-    height: '99vh',
-    nodes: {
-      shape: 'circle',
-      widthConstraint: 100
-    },
-    edges: {
-      length: 200
-    }
-  };
-  const container = document.getElementById('mynetwork');
-  const network = new Network(container, dataObject, options);
-  return network;
-}
 
 const App = props => {
   const [isLoading, setLoading] = useState(false);
@@ -54,9 +31,7 @@ const App = props => {
     return action;
   }, false);
 
-  const [neo4jData, setNeo4jData] = useState('');
-
-  const [network, setNetwork] = useState(null);
+  const [neo4jData, setNeo4jData] = useState({});
 
   const [errorToDisplay, setError] = useState(null);
 
@@ -91,37 +66,31 @@ const App = props => {
     });
   }, []);
 
-  // Update graph whenever data updates
-  useEffect(() => {
-    if (neo4jData !== '') {
-      setNetwork(UpdateGraph(neo4jData));
-    }
-  }, [neo4jData]);
-
   return (
     <MenuContext.Provider value={{ isExpanded, dispatchExpand, setLoading }}>
       <ModalContext.Provider value={{ isShowingModal, dispatchModal, setError }}>
-        <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>
-            {/* Keep modals here */}
-            <GraphModal title="example" contentLabel="Example Modal">
-              <div>Content will go here soon!</div>
-            </GraphModal>
-            <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
-              <div>{JSON.stringify(neo4jData)}</div>
-            </GraphModal>
-            <GraphModal title="Database Management" contentLabel="Database Management">
-              <div>
-                <Button
-                  width="128px"
-                  onClickFunction={() => {
-                    axios.get('/neo4j/wipe').then(() => {
-                      axios.get('/neo4j/export').then(({ data }) => {
-                        setNeo4jData(data);
-                        dispatchModal('none');
-                      });
+        <NetworkContext.Provider value={{ network, neo4jData, setNeo4jData }}>  
+          {/* Keep modals here */}
+          <GraphModal title="example" contentLabel="Example Modal">
+            <div>Content will go here soon!</div>
+          </GraphModal>
+          <GraphModal title="Neo4j Data" contentLabel="Neo4j Data">
+            <div>{JSON.stringify(neo4jData)}</div>
+          </GraphModal>
+          <GraphModal title="Database Management" contentLabel="Database Management">
+            <div>
+              <Button
+                width="128px"
+                onClickFunction={() => {
+                  axios.get('/neo4j/wipe').then(() => {
+                    axios.get('/neo4j/export').then(({ data }) => {
+                      setNeo4jData(data);
+                      dispatchModal('none');
                     });
-                  }}
-                >
+                  });
+                }
+                }
+              >
                   Wipe DB
                 </Button>
               </div>
@@ -225,7 +194,7 @@ const App = props => {
                 </div>
               </MenuBar>
             </AppContainer>
-        </NetworkContext.Provider>
+          </NetworkContext.Provider>
       </ModalContext.Provider>
     </MenuContext.Provider>
   );
