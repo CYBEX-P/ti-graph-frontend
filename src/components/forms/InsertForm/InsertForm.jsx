@@ -2,20 +2,14 @@ import React, { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { Input } from 'reactstrap';
 import axios from 'axios';
-// import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
-import NetworkContext from '../../App/DataContext';
+import DataContext from '../../App/DataContext';
 import ModalContext from '../../App/ModalContext';
 import MenuContext from '../../App/MenuContext';
 
-// const InsertIPSchema = Yup.object().shape({
-//   // IP Validation very rough
-//   ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
-// });
-
 const InsertForm = props => {
-  const { neo4jData, setNeo4jData } = useContext(NetworkContext);
+  const { neo4jData, setNeo4jData } = useContext(DataContext);
   const { dispatchModal, setError } = useContext(ModalContext);
   const { setLoading } = useContext(MenuContext);
 
@@ -74,9 +68,8 @@ const InsertForm = props => {
     <>
       <Formik
         onSubmit={handleInsertIP}
-        //validationSchema={InsertIPSchema}
         initialValues={{ ipToInsert: '', IOCType: 'IP' }}
-        render={({ handleChange, errors, values, handleSubmit }) => ( 
+        render={({ handleChange, errors, values, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <select
               style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
@@ -87,13 +80,15 @@ const InsertForm = props => {
                 setSelectedIOC(e.target.value);
               }}
             >
-              {props.config.types.map(item => (
-                <option value={item} label={item} key={item}>
-                  {item}
-                </option>
-              ))}
+              {typeof props.config !== 'undefined' &&
+                typeof props.config.types !== 'undefined' &&
+                props.config.types.map(item => (
+                  <option value={item} label={item} key={item}>
+                    {item}
+                  </option>
+                ))}
             </select>
-            
+
             <Input placeholder="Data Value" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />
@@ -114,11 +109,13 @@ const InsertForm = props => {
               value={values.enrichmentType}
               onChange={handleChange}
             >
-              {props.config.enrichments[selectedIOC].map(item => (
-                <option value={item} label={item} key={item}>
-                  {item}
-                </option>
-              ))}
+              {typeof props.config !== 'undefined' &&
+                typeof props.config.enrichments !== 'undefined' &&
+                props.config.enrichments[selectedIOC].map(item => (
+                  <option value={item} label={item} key={item}>
+                    {item}
+                  </option>
+                ))}
             </select>
             <select
               style={{ width: '70%', height: '36px', color: '#222222', backgroundColor: '#ffffff' }}
