@@ -12,6 +12,7 @@ const AppContainer = styled.div`
   display: grid;
   grid-template-columns: 36px minmax(100px, 300px) auto minmax(100px, 300px) 36px;
   grid-template-rows: 56px 200px auto 200px 36px;
+  background-color: #ffffff;
 `;
 
 const SplashScreenBody = styled.div`
@@ -35,6 +36,7 @@ const NavBarStyle = styled.nav`
   grid-row: 1;
   display: flex;
   align-items: center;
+  position: fixed;
   color: ${secondaryGrey};
 `;
 
