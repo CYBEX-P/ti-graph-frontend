@@ -2,29 +2,29 @@ import React, { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { Input } from 'reactstrap';
 import axios from 'axios';
-import * as Yup from 'yup';
+// import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../../Button/Button';
 import NetworkContext from '../../App/DataContext';
 import ModalContext from '../../App/ModalContext';
 import MenuContext from '../../App/MenuContext';
 
-const InsertIPSchema = Yup.object().shape({
-  // IP Validation very rough
-  ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
-});
+// const InsertIPSchema = Yup.object().shape({
+//   // IP Validation very rough
+//   ipToInsert: Yup.string().matches(/^([0-9]{1,3}\.)*[0-9]{1,3}$/, 'Only allowed to insert IPv4 Addresses')
+// });
 
 const InsertForm = props => {
   const { neo4jData, setNeo4jData } = useContext(NetworkContext);
   const { dispatchModal, setError } = useContext(ModalContext);
   const { setLoading } = useContext(MenuContext);
 
-  const [selectedIOC, setSelectedIOC] = useState('SrcIP');
+  const [selectedIOC, setSelectedIOC] = useState('IP');
 
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/IP/${ipToInsert}`).then(() => {
+      axios.get(`/neo4j/insert/${selectedIOC}/${ipToInsert}`).then(() => {
         axios
           .get('neo4j/export')
           .then(({ data }) => {
@@ -74,9 +74,9 @@ const InsertForm = props => {
     <>
       <Formik
         onSubmit={handleInsertIP}
-        validationSchema={InsertIPSchema}
-        initialValues={{ ipToInsert: '', IOCType: 'SrcIP' }}
-        render={({ handleChange, errors, values, handleSubmit }) => (
+        //validationSchema={InsertIPSchema}
+        initialValues={{ ipToInsert: '', IOCType: 'IP' }}
+        render={({ handleChange, errors, values, handleSubmit }) => ( 
           <form onSubmit={handleSubmit}>
             <select
               style={{ width: '100%', height: '36px', backgroundColor: '#ffffff', color: '#222222' }}
@@ -93,8 +93,8 @@ const InsertForm = props => {
                 </option>
               ))}
             </select>
-
-            <Input placeholder="IP Address" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
+            
+            <Input placeholder="Data Value" name="ipToInsert" value={values.ipToInsert} onChange={handleChange} />
             <Button width="100%" hasIcon type="submit" onClickFunction={() => {}}>
               <FontAwesomeIcon size="lg" icon="plus-circle" />
               <div>Insert IP</div>
@@ -131,9 +131,9 @@ const InsertForm = props => {
                 neo4jData.Neo4j[0].map(({ nodes }) =>
                   nodes.map(({ properties, id }) => {
                     return (
-                      properties.IP && (
-                        <option key={id} value={properties.IP} label={properties.IP}>
-                          {properties.IP}
+                      properties.data && (
+                        <option key={id} value={properties.data} label={properties.data}>
+                          {properties.data}
                         </option>
                       )
                     );

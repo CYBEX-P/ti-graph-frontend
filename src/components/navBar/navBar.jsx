@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 import { NavBarStyle, UnstyledButton } from '../__styles__/styles';
 import MenuContext from '../App/MenuContext';
 
-const NavBar = () => {
+const NavBar = (props) => {
   const { isExpanded, dispatchExpand } = useContext(MenuContext);
+  
 
   return (
     <>
@@ -18,7 +19,7 @@ const NavBar = () => {
           <FontAwesomeIcon size="lg" icon="bars" color="#e0e0e0" />
         </UnstyledButton>
         <a style={{ flexGrow: 2, textAlign: 'center', color: '#e3e3e3' }} href="/ti-graph">
-          <div>ti-graph</div>
+          <div>ti-graph Event: {props.eName||"Temp Event"}</div>
         </a>
         <UnstyledButton onClick={() => {}}>
           <a style={{ flexGrow: 2, textAlign: 'center', color: '#e3e3e3' }} href="/login">
