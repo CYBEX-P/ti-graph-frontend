@@ -37,11 +37,11 @@ class Register extends Component {
     if (!this.state.last_name) {
       last_nameError = 'last name cannot be blank';
     }
-    if (!this.state.username && this.state.username.length < 4) {
-      usernameError = 'username cannot be blank';
+    if (!this.state.username || this.state.username.length < 4) {
+      usernameError = 'username must be more than 3 characters';
     }
-    if (!this.state.password && this.state.password.length < 8) {
-      passwordError = 'password too short';
+    if (!this.state.password || this.state.password.length < 4) {
+      passwordError = 'password must be more than 3 characters';
     }
 
     if (!this.state.email.includes('@')) {
@@ -67,9 +67,9 @@ class Register extends Component {
 
     const isValid = this.validate();
     if (isValid) {
-      register(newUser).then(res => {
-        this.props.history.push('/login');
-      });
+      let res = register(newUser);
+      console.log(res);
+      this.props.history.push('/login');
     }
   }
 
