@@ -41,10 +41,10 @@ const App = props => {
   function handleEnrichAll() {
     setLoading(true);
     axios
-      .get('/enrich/all')
+      .get('/api/v1/enrich/all')
       .then(() => {
         axios
-          .get('/neo4j/export')
+          .get('/api/v1/neo4j/export')
           .then(({ data }) => {
             setNeo4jData(data);
             setLoading(false);
@@ -62,7 +62,7 @@ const App = props => {
 
   // Get data on first render
   useEffect(() => {
-    axios.get('/neo4j/export').then(({ data }) => {
+    axios.get('/api/v1/neo4j/export').then(({ data }) => {
       setNeo4jData(data);
     });
   }, []);
@@ -83,8 +83,8 @@ const App = props => {
               <Button
                 width="128px"
                 onClickFunction={() => {
-                  axios.get('/neo4j/wipe').then(() => {
-                    axios.get('/neo4j/export').then(({ data }) => {
+                  axios.get('/api/v1/neo4j/wipe').then(() => {
+                    axios.get('/api/v1/neo4j/export').then(({ data }) => {
                       setNeo4jData(data);
                       dispatchModal('none');
                     });
@@ -180,8 +180,8 @@ const App = props => {
                   <Button
                     type="button"
                     onClickFunction={() => {
-                      axios.get('/neo4j/wipe').then(() => {
-                        axios.get('/neo4j/export').then(({ data }) => {
+                      axios.get('/api/v1/neo4j/wipe').then(() => {
+                        axios.get('/api/v1/neo4j/export').then(({ data }) => {
                           setNeo4jData(data);
                         });
                       });

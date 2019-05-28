@@ -14,9 +14,9 @@ const EventInsertForm = props => {
   function handleInsertIP(values, actions) {
     props.setEvent(values.eventName);
     if (values.dataToInsert1 !== '') {
-      axios.post(`/event/start`, values).then(() => {
+      axios.post(`/api/v1/event/start`, values).then(() => {
         axios
-          .get('neo4j/export')
+          .get('/api/v1/neo4j/export')
           .then(({ data }) => {
             setNeo4jData(data);
           })
@@ -32,9 +32,9 @@ const EventInsertForm = props => {
     formData.append('file', values.file);
     formData.append('eventName', values.eventName2);
     props.setEvent(values.eventName2);
-    axios.post(`/event/start/file`, formData).then(({ data }) => {
+    axios.post(`/api/v1/event/start/file`, formData).then(({ data }) => {
       axios
-        .get('neo4j/export')
+        .get('/api/v1/neo4j/export')
         .then(({ data }) => {
           setNeo4jData(data);
         })

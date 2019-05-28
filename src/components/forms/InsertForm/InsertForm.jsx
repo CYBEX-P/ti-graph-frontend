@@ -18,9 +18,9 @@ const InsertForm = props => {
   function handleInsertIP(values, actions) {
     const { ipToInsert } = values;
     if (ipToInsert !== '') {
-      axios.get(`/neo4j/insert/${selectedIOC}/${ipToInsert}`).then(() => {
+      axios.get(`/api/v1/neo4j/insert/${selectedIOC}/${ipToInsert}`).then(() => {
         axios
-          .get('neo4j/export')
+          .get('/api/v1/neo4j/export')
           .then(({ data }) => {
             setNeo4jData(data);
           })
@@ -35,11 +35,11 @@ const InsertForm = props => {
     if (ipToEnrich !== 'none') {
       setLoading(true);
       axios
-        .get(`/enrich/${enrichmentType}/${ipToEnrich}`)
+        .get(`/api/v1/enrich/${enrichmentType}/${ipToEnrich}`)
         .then(({ data }) => {
           if (data['insert status'] !== 0) {
             axios
-              .get('neo4j/export')
+              .get('/api/v1/neo4j/export')
               .then(response => {
                 setNeo4jData(response.data);
                 setLoading(false);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from '../components/Button/Button';
+import axios from 'axios';
 
 const Landing = ({ isSignedIn }) => (
   <>
@@ -8,14 +9,12 @@ const Landing = ({ isSignedIn }) => (
     <p>NSF funded project at the University of Nevada, Reno</p>
     {!isSignedIn && (
       <>
-        <a href="/ti-graph">
-          <Button hasIcon width="100%" onClickFunction={() => {}}>
-            <FontAwesomeIcon fixedWidth size="lg" icon="user" color="#e0e0e0" />
-            <div style={{ width: '100%', textAlign: 'center' }}>Login</div>
-          </Button>
-        </a>
+        <Button hasIcon width="100%" onClickFunction={() => {axios.post('/api/v1/session/init', {user : 'testUser'}).then(({data}) => {alert(data)})}}>
+          <FontAwesomeIcon fixedWidth size="lg" icon="user" color="#e0e0e0" />
+          <div style={{ width: '100%', textAlign: 'center' }}>Login</div>
+        </Button>
         <br />
-        <a href="/ti-graph">
+        <a href="/tiweb/graph">
           <Button hasIcon width="100%" onClickFunction={() => {}}>
             <FontAwesomeIcon fixedWidth size="lg" icon="user-plus" color="#e0e0e0" />
             <div style={{ width: '100%', textAlign: 'center' }}>Register</div>

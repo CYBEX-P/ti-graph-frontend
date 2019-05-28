@@ -56,7 +56,7 @@ library.add(
 let YAMLConfig = {};
 
 axios
-  .get(`/admin/config`)
+  .get(`/api/v1/admin/config`)
   .then(({ data }) => {
     YAMLConfig = data;
     ReactDOM.render(<App config={YAMLConfig} />, document.getElementById('root'));

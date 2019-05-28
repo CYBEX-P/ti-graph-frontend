@@ -165,7 +165,6 @@ const Graph = ({ isLoading }) => {
   // HOC that returns the radial menu to use
   const RadialToRender = withNodeType(RadialMenu, selectedNodeType, setNeo4jData, config);
 
-  console.log(selectedNodeType);
   return (
     <div style={{ display: 'grid', gridTemplateRows: '56px auto' }}>
       <div

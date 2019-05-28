@@ -13,9 +13,9 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
   }
 
   function EnrichIPbyType(type) {
-    axios.get(`/enrich/${type}/${nodeType.properties.data}`).then(({ data }) => {
+    axios.get(`/api/v1/enrich/${type}/${nodeType.properties.data}`).then(({ data }) => {
       if (data['insert status'] !== 0) {
-        axios.get('neo4j/export').then(response => {
+        axios.get('/api/v1/neo4j/export').then(response => {
           setNeo4jData(response.data);
         });
       }
@@ -24,9 +24,9 @@ function withNodeType(RadialMenuComponent, nodeType, setNeo4jData, config) {
 
   function EnrichIPAll() {
     config.enrichments.IP.map(enrichmentType => {
-      axios.get(`/enrich/${enrichmentType}/${nodeType.properties.data}`).then(({ data }) => {
+      axios.get(`/api/v1/enrich/${enrichmentType}/${nodeType.properties.data}`).then(({ data }) => {
         if (data['insert status'] !== 0) {
-          axios.get('neo4j/export').then(response => {
+          axios.get('/api/v1/neo4j/export').then(response => {
             setNeo4jData(response.data);
           });
         }

@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import MainApp from './components/App/MainApp';
 import Login from './pages/Login';
@@ -39,22 +39,24 @@ const App = ({ config }) => {
     return setSignedIn(false);
   }, []);
   return (
-    <Router>
+    <Router basename='/tiweb'>
       <div style={{ minHeight: '100vh', backgroundColor: '#efefef' }} className="App">
-        <Route exact path="/ti-graph" component={() => <MainApp config={config} />} />
+        <Route path="/graph" component={() => <MainApp config={config} />} />
+
         <MenuContext.Provider value={{ dispatchExpand, isExpanded }}>
           <NavBar />
         </MenuContext.Provider>
+
         <div style={{ backgroundColor: '#ffffff', paddingTop: '56px', paddingBottom: '32px' }} className="container">
-          <Route exact path="/" component={() => <Landing isSignedIn={isSignedIn} />} />
-          <Route exact path="/home" component={() => <Landing isSignedIn={isSignedIn} />} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/remove" component={Remove} />
-          <Route exact path="/update" component={Update} />
-          <Route exact path="/find" component={Find} />
-          <Route exact path="/found" component={Found} />
+          <Route exact path="/" component={() => <Redirect to="/home" />} />
+          <Route path="/home" component={() => <Landing isSignedIn={isSignedIn} />} />
+          <Route path="/register" component={Register} />
+          <Route path="/login" component={Login} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/remove" component={Remove} />
+          <Route path="/update" component={Update} />
+          <Route path="/find" component={Find} />
+          <Route path="/found" component={Found} />
         </div>
       </div>
     </Router>
